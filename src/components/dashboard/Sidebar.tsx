@@ -17,11 +17,18 @@ interface NavGroup {
 
 const navGroups: NavGroup[] = [
   {
-    label: 'Jobs',
+    label: 'Dashboard',
     items: [
-      { href: '/calendar', label: 'Calendar', icon: '📅' },
+      { href: '/dashboard', label: 'Overview', icon: '🏠' },
+      { href: '/revenue', label: 'Revenue', icon: '💷' },
+    ],
+  },
+  {
+    label: 'Scheduling',
+    items: [
+      { href: '/scheduling', label: 'Calendar', icon: '📅' },
+      { href: '/map', label: 'Live Map', icon: '🗺️' },
       { href: '/jobs', label: 'Job List', icon: '📋' },
-      { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
     ],
   },
   {
@@ -34,6 +41,7 @@ const navGroups: NavGroup[] = [
     label: 'Engineers',
     items: [
       { href: '/engineers', label: 'Team', icon: '👷' },
+      { href: '/mobile', label: 'Mobile View', icon: '📱' },
     ],
   },
   {
@@ -41,19 +49,16 @@ const navGroups: NavGroup[] = [
     items: [
       { href: '/invoices', label: 'Invoices', icon: '💰' },
       { href: '/quotes', label: 'Quotes', icon: '📝' },
+      { href: '/quotes/builder', label: 'Quote Builder', icon: '🔨' },
       { href: '/cis', label: 'CIS Tax', icon: '💷' },
     ],
   },
   {
-    label: 'Compliance',
+    label: 'Operations',
     items: [
-      { href: '/certificates', label: 'Certificates', icon: '📜' },
-    ],
-  },
-  {
-    label: 'Fleet',
-    items: [
+      { href: '/stock', label: 'Parts & Stock', icon: '📦' },
       { href: '/fleet', label: 'Vehicles', icon: '🚐' },
+      { href: '/certificates', label: 'Certificates', icon: '📜' },
     ],
   },
   {
@@ -66,6 +71,8 @@ const navGroups: NavGroup[] = [
     label: 'Settings',
     items: [
       { href: '/settings', label: 'Company', icon: '🏢' },
+      { href: '/settings/notifications', label: 'Notifications', icon: '🔔' },
+      { href: '/branches', label: 'Branches', icon: '🏪' },
     ],
   },
 ];

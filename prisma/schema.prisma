@@ -470,3 +470,126 @@ model ContactSubmission {
   device    String?
   createdAt DateTime @default(now())
 }
+
+// ==================== STOCK & PARTS ====================
+
+model StockItem {
+  id             String   @id @default(cuid())
+  companyId      String
+  partNumber     String
+  description    String
+  category       String?  // plumbing, electrical, hvac, general
+  supplier       String?
+  unitCost       Float
+  retailPrice    Float?
+  stockLevel     Int      @default(0)
+  reorderLevel   Int      @default(5)
+  reorderQty     Int      @default(10)
+  location       String?  // warehouse, van_1, van_2
+  barcode        String?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([companyId, partNumber])
+}
+
+model StockMovement {
+  id          String   @id @default(cuid())
+  partNumber  String
+  type        String   // in, out, adjustment, transfer
+  quantity    Int
+  fromLocation String?
+  toLocation   String?
+  jobId        String?
+  engineerId   String?
+  notes        String?
+  createdAt    DateTime @default(now())
+}
+
+// ==================== BRANCHES ====================
+
+model Branch {
+  id          String   @id @default(cuid())
+  companyId   String
+  name        String
+  address     String?
+  postcode    String?
+  phone       String?
+  email       String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([companyId, name])
+}
+
+// ==================== RECURRING JOBS ====================
+
+model RecurringJob {
+  id            String    @id @default(cuid())
+  companyId     String
+  customerId    String
+  propertyId    String?
+  title         String
+  description   String?
+  jobType       String
+  trade         String
+  frequency     String    // daily, weekly, monthly, quarterly, annually
+  nextDueDate   DateTime
+  lastJobDate   DateTime?
+  engineerId    String?
+  duration      Float?
+  isActive      Boolean   @default(true)
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// ==================== NOTIFICATION TEMPLATES ====================
+
+model NotificationTemplate {
+  id          String   @id @default(cuid())
+  companyId   String
+  name        String
+  type        String   // sms, email
+  event       String   // appointment_reminder, job_complete, invoice_sent, engineer_enroute
+  subject     String?
+  body        String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([companyId, event, type])
+}
+
+// ==================== CUSTOMER PORTAL ====================
+
+model CustomerPortalAccess {
+  id          String   @id @default(cuid())
+  customerId  String   @unique
+  email       String   @unique
+  accessToken String   @unique
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  lastLogin   DateTime?
+}
+
+model CustomerRating {
+  id          String   @id @default(cuid())
+  customerId  String
+  jobId       String
+  rating      Int      // 1-5
+  feedback    String?
+  createdAt   DateTime @default(now())
+}
+
+model CallbackRequest {
+  id          String   @id @default(cuid())
+  customerId  String
+  phone       String
+  message     String?
+  status      String   @default("pending") // pending, contacted, completed
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
