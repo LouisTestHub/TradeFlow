@@ -7,6 +7,7 @@ import { TradeFlowLogo } from '@/components/icons/TradeFlowLogo';
 const navLinks = [
   { href: '/features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
+  { href: '/v2', label: 'V2 Vision' },
   { href: '/#how-it-works', label: 'How It Works' },
   { href: '/#faq', label: 'FAQ' },
   { href: '/contact', label: 'Contact' },
