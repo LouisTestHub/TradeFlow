@@ -7,13 +7,12 @@ const footerLinks = {
   Product: [
     { href: '/features', label: 'Features' },
     { href: '/pricing', label: 'Pricing' },
-    { href: '/v2', label: 'V2 Vision' },
-    { href: '/#how-it-works', label: 'How It Works' },
-    { href: '/#faq', label: 'FAQ' },
+    { href: '/compliance', label: 'Compliance' },
+    { href: '/comparison', label: 'Compare' },
   ],
   Resources: [
-    { href: '/contact', label: 'Help Centre' },
-    { href: '/about', label: 'Blog' },
+    { href: '/case-studies', label: 'Case Studies' },
+    { href: '/#faq', label: 'FAQ' },
     { href: '/contact', label: 'Support' },
   ],
   Company: [
@@ -35,7 +34,7 @@ export function Footer() {
             <p className="text-sm text-slate-400 mb-4">
               Complete field service platform for UK plumbers, electricians, and HVAC engineers.
             </p>
-            <a href="mailto:hello@tradeflow.co.uk" className="text-sm text-[#F97316] hover:text-orange-300 transition-colors">
+            <a href="mailto:hello@tradeflow.co.uk" className="text-sm text-[#FF6F00] hover:text-orange-300 transition-colors">
               hello@tradeflow.co.uk
             </a>
             <p className="text-xs text-slate-500 mt-6">
