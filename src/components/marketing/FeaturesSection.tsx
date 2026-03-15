@@ -45,12 +45,12 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-20 lg:py-28 bg-[#FAFAF5]">
+    <section id="features" className="py-20 lg:py-28 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollFadeIn>
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-[var(--font-dm-sans)] text-3xl sm:text-4xl font-bold text-[#1E293B]">
-              One Platform. <span className="text-[#1B5E20]">Everything You Need.</span>
+            <h2 className="font-[var(--font-dm-sans)] text-3xl sm:text-4xl font-bold text-[#0F172A]">
+              One Platform. <span className="text-[#1E3A5F]">Everything You Need.</span>
             </h2>
             <p className="mt-4 text-lg text-slate-600">
               Built specifically for UK trades. Every feature designed around how plumbers, electricians, and HVAC engineers actually work.
@@ -61,9 +61,9 @@ export function FeaturesSection() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, i) => (
             <ScrollFadeIn key={i} delay={i * 100}>
-              <div className="bg-white rounded-2xl p-8 border border-gray-100 hover:shadow-lg hover:border-[#1B5E20]/20 transition-all group">
+              <div className="bg-white rounded-2xl p-8 border border-slate-200 hover:shadow-lg hover:border-[#2563EB]/30 transition-all group">
                 <div className="mb-4 group-hover:scale-105 transition-transform">{feature.icon}</div>
-                <h3 className="text-xl font-semibold text-[#1E293B] font-[var(--font-dm-sans)] mb-3">{feature.title}</h3>
+                <h3 className="text-xl font-semibold text-[#0F172A] font-[var(--font-dm-sans)] mb-3">{feature.title}</h3>
                 <p className="text-slate-600 leading-relaxed">{feature.description}</p>
               </div>
             </ScrollFadeIn>

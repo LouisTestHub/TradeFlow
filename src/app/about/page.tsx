@@ -13,10 +13,10 @@ export default function AboutPage() {
     <>
       <Header />
       <main>
-        <section className="py-20 lg:py-28 bg-[#FAFAF5]">
+        <section className="py-20 lg:py-28 bg-[#F8FAFC]">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 className="font-[var(--font-dm-sans)] text-4xl sm:text-5xl font-bold text-[#1E293B] leading-tight mb-8">
-              Built by People Who <span className="text-[#1B5E20]">Understand UK Trades</span>
+            <h1 className="font-[var(--font-dm-sans)] text-4xl sm:text-5xl font-bold text-[#0F172A] leading-tight mb-8">
+              Built by People Who <span className="text-[#1E3A5F]">Understand UK Trades</span>
             </h1>
 
             <div className="prose prose-lg max-w-none text-slate-600 space-y-6">
@@ -24,18 +24,18 @@ export default function AboutPage() {
                 TradeFlow is built by <strong>Data & Digital Ltd</strong> — a UK software agency specialising in operational software that makes real businesses run better.
               </p>
 
-              <h2 className="text-2xl font-bold text-[#1E293B] font-[var(--font-dm-sans)] mt-12">Why We Built TradeFlow</h2>
+              <h2 className="text-2xl font-bold text-[#0F172A] font-[var(--font-dm-sans)] mt-12">Why We Built TradeFlow</h2>
               <p>
                 We spent months talking to plumbers, electricians, and HVAC engineers across the UK. The same frustration came up again and again: <em>&quot;I'm juggling 4-7 different systems and still entering the same data multiple times.&quot;</em>
               </p>
               <p>
-                UK trades businesses waste 5–10 hours per week on admin — entering job details into job management, then again into Xero with CIS deductions, then logging certificates separately. With 150,000+ SME trades businesses in the UK, that's millions of hours wasted on duplicate data entry.
+                UK trades businesses waste 5–10 hours per week on admin — entering job details into job management, then again into Xero with CIS deductions, then logging certificates separately. With 150,000+ SME trades businesses in the UK, that&apos;s millions of hours wasted on duplicate data entry.
               </p>
               <p>
                 No single platform existed that covered job management, CIS tax compliance, digital certificates (Gas Safe, NICEIC, F-Gas), engineer scheduling, and fleet tracking in one unified system. So we built one.
               </p>
 
-              <h2 className="text-2xl font-bold text-[#1E293B] font-[var(--font-dm-sans)] mt-12">Our Principles</h2>
+              <h2 className="text-2xl font-bold text-[#0F172A] font-[var(--font-dm-sans)] mt-12">Our Principles</h2>
               <ul className="space-y-3">
                 <li><strong>Trades first.</strong> Every design decision starts with: &quot;Would this work for an engineer in a basement with no signal?&quot;</li>
                 <li><strong>Offline by default.</strong> No signal? No problem. TradeFlow works without internet.</li>
@@ -44,7 +44,7 @@ export default function AboutPage() {
                 <li><strong>Honest pricing.</strong> Per-user pricing. No hidden fees, no contracts, no surprise charges.</li>
               </ul>
 
-              <h2 className="text-2xl font-bold text-[#1E293B] font-[var(--font-dm-sans)] mt-12">Data Security</h2>
+              <h2 className="text-2xl font-bold text-[#0F172A] font-[var(--font-dm-sans)] mt-12">Data Security</h2>
               <p>
                 Your business data is sensitive. We treat it that way:
               </p>
@@ -56,12 +56,12 @@ export default function AboutPage() {
                 <li>📋 ICO registered — GDPR compliant</li>
               </ul>
 
-              <h2 className="text-2xl font-bold text-[#1E293B] font-[var(--font-dm-sans)] mt-12">Contact</h2>
+              <h2 className="text-2xl font-bold text-[#0F172A] font-[var(--font-dm-sans)] mt-12">Contact</h2>
               <p>
                 Questions? Want to see a demo? Get in touch:
               </p>
               <p>
-                <strong>Email:</strong> <a href="mailto:hello@fieldkeeper.co.uk" className="text-[#1B5E20] hover:underline">hello@fieldkeeper.co.uk</a><br />
+                <strong>Email:</strong> <a href="mailto:hello@tradeflow.co.uk" className="text-[#2563EB] hover:underline">hello@tradeflow.co.uk</a><br />
                 <strong>Phone:</strong> 020 1234 5678 (Monday–Friday, 9am–5pm)
               </p>
             </div>

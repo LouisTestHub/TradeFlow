@@ -59,12 +59,12 @@ const tiers = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-20 lg:py-28 bg-[#FAFAF5]">
+    <section id="pricing" className="py-20 lg:py-28 bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollFadeIn>
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-[var(--font-dm-sans)] text-3xl sm:text-4xl font-bold text-[#1E293B]">
-              Simple, <span className="text-[#1B5E20]">Transparent Pricing</span>
+            <h2 className="font-[var(--font-dm-sans)] text-3xl sm:text-4xl font-bold text-[#0F172A]">
+              Simple, <span className="text-[#1E3A5F]">Transparent Pricing</span>
             </h2>
             <p className="mt-4 text-lg text-slate-600">
               Per-user pricing. No hidden fees. Cancel anytime. Annual plans save £200+.
@@ -78,19 +78,19 @@ export function PricingSection() {
               <div
                 className={`relative bg-white rounded-2xl p-8 border-2 transition-shadow ${
                   tier.popular
-                    ? 'border-[#1B5E20] shadow-xl scale-[1.02]'
-                    : 'border-gray-100 hover:shadow-lg'
+                    ? 'border-[#1E3A5F] shadow-xl scale-[1.02]'
+                    : 'border-slate-200 hover:shadow-lg'
                 }`}
               >
                 {tier.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#F9A825] text-[#1E293B] text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#F97316] text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">
                     ⭐ Most Popular
                   </div>
                 )}
                 <div className="flex justify-center mb-4">{tier.icon}</div>
-                <h3 className="text-xl font-bold text-[#1E293B] font-[var(--font-dm-sans)] text-center">{tier.name}</h3>
+                <h3 className="text-xl font-bold text-[#0F172A] font-[var(--font-dm-sans)] text-center">{tier.name}</h3>
                 <div className="text-center mt-4">
-                  <span className="text-4xl font-bold text-[#1B5E20] font-[var(--font-dm-sans)]">£{tier.price}</span>
+                  <span className="text-4xl font-bold text-[#1E3A5F] font-[var(--font-dm-sans)]">£{tier.price}</span>
                   <span className="text-slate-500">/user/month</span>
                 </div>
                 <p className="text-center text-sm text-slate-400 mt-1">
@@ -99,7 +99,7 @@ export function PricingSection() {
                 <ul className="mt-6 space-y-3">
                   {tier.features.map((feature, j) => (
                     <li key={j} className="flex items-start gap-2 text-sm text-slate-600">
-                      <svg className="w-4 h-4 text-[#4CAF50] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-4 h-4 text-[#22C55E] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                       {feature}
@@ -110,8 +110,8 @@ export function PricingSection() {
                   href="/login"
                   className={`mt-8 block text-center px-6 py-3 rounded-xl font-semibold text-base transition-colors min-h-[48px] leading-[48px] ${
                     tier.popular
-                      ? 'bg-[#1B5E20] text-white hover:bg-[#145218]'
-                      : 'bg-[#E8F5E9] text-[#1B5E20] hover:bg-[#C8E6C9]'
+                      ? 'bg-[#1E3A5F] text-white hover:bg-[#162D4A]'
+                      : 'bg-[#EFF6FF] text-[#1E3A5F] hover:bg-[#DBEAFE]'
                   }`}
                 >
                   Start Free Trial
@@ -129,8 +129,8 @@ export function PricingSection() {
               <span>✓ Cancel anytime</span>
               <span>✓ UK-based support</span>
             </div>
-            <p className="text-base text-[#1B5E20] font-medium max-w-xl mx-auto">
-              💰 "Saves 5–10 hours/week on admin = £3,000–6,000/year. TradeFlow pays for itself in 8 weeks."
+            <p className="text-base text-[#1E3A5F] font-medium max-w-xl mx-auto">
+              💰 &quot;Saves 5–10 hours/week on admin = £3,000–6,000/year. TradeFlow pays for itself in 8 weeks.&quot;
             </p>
           </div>
         </ScrollFadeIn>

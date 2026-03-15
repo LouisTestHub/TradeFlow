@@ -30,7 +30,7 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-slate-600 hover:text-green-800 transition-colors"
+                className="text-sm font-medium text-slate-600 hover:text-[#1E3A5F] transition-colors"
               >
                 {link.label}
               </Link>
@@ -41,13 +41,13 @@ export function Header() {
           <div className="hidden lg:flex items-center gap-4">
             <Link
               href="/login"
-              className="text-sm font-medium text-slate-600 hover:text-green-800 transition-colors px-4 py-2"
+              className="text-sm font-medium text-slate-600 hover:text-[#1E3A5F] transition-colors px-4 py-2"
             >
               Login
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center justify-center px-6 py-2.5 bg-green-800 text-white text-sm font-semibold rounded-lg hover:bg-green-900 transition-colors shadow-sm"
+              className="inline-flex items-center justify-center px-6 py-2.5 bg-[#1E3A5F] text-white text-sm font-semibold rounded-lg hover:bg-[#162D4A] transition-colors shadow-sm"
             >
               Try Free
             </Link>
@@ -56,7 +56,7 @@ export function Header() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden p-3 -mr-2 text-slate-600 hover:text-green-800"
+            className="lg:hidden p-3 -mr-2 text-slate-600 hover:text-[#1E3A5F]"
             aria-label="Toggle menu"
             aria-expanded={mobileOpen}
           >
@@ -80,7 +80,7 @@ export function Header() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="text-lg font-medium text-slate-700 hover:text-green-800 py-3 px-4 rounded-lg hover:bg-green-50 transition-colors min-h-[48px] flex items-center"
+                className="text-lg font-medium text-slate-700 hover:text-[#1E3A5F] py-3 px-4 rounded-lg hover:bg-[#EFF6FF] transition-colors min-h-[48px] flex items-center"
               >
                 {link.label}
               </Link>
@@ -89,14 +89,14 @@ export function Header() {
             <Link
               href="/login"
               onClick={() => setMobileOpen(false)}
-              className="text-lg font-medium text-slate-700 hover:text-green-800 py-3 px-4 rounded-lg hover:bg-green-50 transition-colors min-h-[48px] flex items-center"
+              className="text-lg font-medium text-slate-700 hover:text-[#1E3A5F] py-3 px-4 rounded-lg hover:bg-[#EFF6FF] transition-colors min-h-[48px] flex items-center"
             >
               Login
             </Link>
             <Link
               href="/login"
               onClick={() => setMobileOpen(false)}
-              className="mt-2 inline-flex items-center justify-center px-6 py-4 bg-green-800 text-white text-lg font-semibold rounded-lg hover:bg-green-900 transition-colors min-h-[48px]"
+              className="mt-2 inline-flex items-center justify-center px-6 py-4 bg-[#1E3A5F] text-white text-lg font-semibold rounded-lg hover:bg-[#162D4A] transition-colors min-h-[48px]"
             >
               Start Free Trial
             </Link>

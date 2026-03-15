@@ -34,8 +34,8 @@ export function ProblemSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollFadeIn>
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-[var(--font-dm-sans)] text-3xl sm:text-4xl font-bold text-[#1E293B]">
-              Field Service Software Is <span className="text-[#EF5350]">Broken</span>
+            <h2 className="font-[var(--font-dm-sans)] text-3xl sm:text-4xl font-bold text-[#0F172A]">
+              Field Service Software Is <span className="text-[#EF4444]">Broken</span>
             </h2>
             <p className="mt-4 text-lg text-slate-600">
               UK trades businesses waste thousands of hours a year juggling disconnected systems. Sound familiar?
@@ -46,12 +46,12 @@ export function ProblemSection() {
         <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
           {problems.map((problem, i) => (
             <ScrollFadeIn key={i} delay={i * 150}>
-              <div className="text-center p-8 rounded-2xl bg-[#FAFAF5] border border-gray-100 hover:shadow-lg transition-shadow">
+              <div className="text-center p-8 rounded-2xl bg-[#F8FAFC] border border-slate-200 hover:shadow-lg transition-shadow">
                 <div className="flex justify-center mb-4">{problem.icon}</div>
-                <div className="text-2xl font-bold text-[#1B5E20] font-[var(--font-dm-sans)] mb-2">
+                <div className="text-2xl font-bold text-[#1E3A5F] font-[var(--font-dm-sans)] mb-2">
                   {problem.stat}{problem.statSuffix}
                 </div>
-                <h3 className="text-xl font-semibold text-[#1E293B] font-[var(--font-dm-sans)] mb-3">{problem.title}</h3>
+                <h3 className="text-xl font-semibold text-[#0F172A] font-[var(--font-dm-sans)] mb-3">{problem.title}</h3>
                 <p className="text-slate-600 leading-relaxed">{problem.description}</p>
               </div>
             </ScrollFadeIn>

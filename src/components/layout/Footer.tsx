@@ -34,8 +34,8 @@ export function Footer() {
             <p className="text-sm text-slate-400 mb-4">
               Complete field service platform for UK plumbers, electricians, and HVAC engineers.
             </p>
-            <a href="mailto:hello@fieldkeeper.co.uk" className="text-sm text-green-400 hover:text-green-300 transition-colors">
-              hello@fieldkeeper.co.uk
+            <a href="mailto:hello@tradeflow.co.uk" className="text-sm text-[#F97316] hover:text-orange-300 transition-colors">
+              hello@tradeflow.co.uk
             </a>
             <p className="text-xs text-slate-500 mt-6">
               A DataNDigital Product
@@ -48,7 +48,7 @@ export function Footer() {
               <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">{heading}</h3>
               <ul className="space-y-3">
                 {links.map((link) => (
-                  <li key={link.href}>
+                  <li key={link.href + link.label}>
                     <Link href={link.href} className="text-sm text-slate-400 hover:text-white transition-colors">
                       {link.label}
                     </Link>

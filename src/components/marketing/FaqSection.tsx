@@ -43,8 +43,8 @@ export function FaqSection() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <ScrollFadeIn>
           <div className="text-center mb-16">
-            <h2 className="font-[var(--font-dm-sans)] text-3xl sm:text-4xl font-bold text-[#1E293B]">
-              Frequently Asked <span className="text-[#1B5E20]">Questions</span>
+            <h2 className="font-[var(--font-dm-sans)] text-3xl sm:text-4xl font-bold text-[#0F172A]">
+              Frequently Asked <span className="text-[#1E3A5F]">Questions</span>
             </h2>
           </div>
         </ScrollFadeIn>
@@ -52,10 +52,10 @@ export function FaqSection() {
         <div className="space-y-3">
           {faqs.map((faq, i) => (
             <ScrollFadeIn key={i} delay={i * 50}>
-              <details className="group bg-[#FAFAF5] rounded-xl border border-gray-100 overflow-hidden">
-                <summary className="flex items-center justify-between p-5 sm:p-6 font-semibold text-[#1E293B] cursor-pointer min-h-[48px] hover:bg-[#E8F5E9]/50 transition-colors">
+              <details className="group bg-[#F8FAFC] rounded-xl border border-slate-200 overflow-hidden">
+                <summary className="flex items-center justify-between p-5 sm:p-6 font-semibold text-[#0F172A] cursor-pointer min-h-[48px] hover:bg-[#EFF6FF]/50 transition-colors">
                   <span className="text-base sm:text-lg pr-4">{faq.q}</span>
-                  <svg className="faq-chevron w-5 h-5 flex-shrink-0 text-[#1B5E20]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="faq-chevron w-5 h-5 flex-shrink-0 text-[#1E3A5F]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
