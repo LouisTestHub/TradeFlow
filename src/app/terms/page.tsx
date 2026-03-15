@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'TradeFlow terms of service. Terms and conditions for using the TradeFlow farm compliance platform.',
+  description: 'TradeFlow terms of service. Terms and conditions for using the TradeFlow field service management platform.',
 };
 
 export default function TermsPage() {
@@ -18,7 +18,7 @@ export default function TermsPage() {
 
           <div className="prose prose-slate max-w-none space-y-8 text-slate-600 [&_h2]:text-[#1E293B] [&_h2]:font-[var(--font-dm-sans)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4">
             <h2>1. Service Description</h2>
-            <p>TradeFlow is a farm compliance and record-keeping platform operated by Data & Digital Ltd (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;). By using TradeFlow, you agree to these terms.</p>
+            <p>TradeFlow is a field service management and compliance platform operated by Data & Digital Ltd (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;). By using TradeFlow, you agree to these terms.</p>
 
             <h2>2. Accounts</h2>
             <p>You are responsible for maintaining the security of your account credentials. You must be at least 18 years old to create an account. You must provide accurate information during registration.</p>
@@ -57,7 +57,7 @@ export default function TermsPage() {
             <p>These terms are governed by the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the English courts.</p>
 
             <h2>12. Contact</h2>
-            <p>For questions about these terms: <a href="mailto:legal@fieldkeeper.co.uk" className="text-[#1B5E20] hover:underline">legal@fieldkeeper.co.uk</a></p>
+            <p>For questions about these terms: <a href="mailto:legal@tradeflow.co.uk" className="text-[#1B5E20] hover:underline">legal@tradeflow.co.uk</a></p>
             <p>Data & Digital Ltd, 1 Tech Lane, Bristol, BS1 1AA</p>
           </div>
         </div>

@@ -12,7 +12,7 @@ export default function IntegrationsPage() {
 
   // Category mapping state
   const [categories, setCategories] = useState({
-    cropProtection: 'Crop Protection',
+    materials: 'Materials & Parts',
     medicine: 'Veterinary & Medicine',
     fertiliser: 'Fertiliser & Nutrients',
     vetFees: 'Veterinary & Medicine',
@@ -21,7 +21,7 @@ export default function IntegrationsPage() {
   const handleConnect = () => {
     // Placeholder: would redirect to Xero OAuth2
     setXeroConnected(true);
-    setXeroOrg('Oakfield Farm Ltd');
+    setXeroOrg('TradeFlow Services Ltd');
   };
 
   const handleDisconnect = () => {
@@ -143,7 +143,7 @@ export default function IntegrationsPage() {
               <div className="space-y-2 text-sm text-slate-600">
                 <div className="flex items-start gap-2">
                   <span className="text-primary">•</span>
-                  <p><span className="font-medium">Spray costs</span> → Xero expense ({categories.cropProtection})</p>
+                  <p><span className="font-medium">Materials costs</span> → Xero expense ({categories.materials})</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <span className="text-primary">•</span>
@@ -167,7 +167,7 @@ export default function IntegrationsPage() {
         )}
       </div>
 
-      {/* Sencrop Integration (placeholder) */}
+      {/* Gas Safe Integration (placeholder) */}
       <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-2xl shrink-0">
@@ -175,12 +175,12 @@ export default function IntegrationsPage() {
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-1">
-              <h2 className="text-lg font-semibold text-slate-800">Sencrop Weather</h2>
+              <h2 className="text-lg font-semibold text-slate-800">Gas Safe Register</h2>
               <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">⬜ Not connected</span>
             </div>
-            <p className="text-sm text-slate-500 mb-3">Connect your Sencrop weather station for automatic weather data in spray records.</p>
+            <p className="text-sm text-slate-500 mb-3">Connect your Gas Safe weather station for automatic weather data in spray records.</p>
             <button className="text-sm text-slate-600 border border-gray-200 px-4 py-2 rounded-xl hover:bg-gray-50 min-h-[48px]">
-              Connect Sencrop Account
+              Connect Gas Safe Account
             </button>
           </div>
         </div>
@@ -190,14 +190,14 @@ export default function IntegrationsPage() {
       <div className="bg-white rounded-2xl border border-gray-200 p-6">
         <div className="flex items-start gap-4">
           <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-2xl shrink-0">
-            🐄
+            ⚡
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-1">
-              <h2 className="text-lg font-semibold text-slate-800">BCMS (CTS Online)</h2>
+              <h2 className="text-lg font-semibold text-slate-800">NICEIC Certification</h2>
               <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">Coming Soon</span>
             </div>
-            <p className="text-sm text-slate-500">Direct BCMS submission for livestock movements. Coming in a future update.</p>
+            <p className="text-sm text-slate-500">Direct BCMS submission for engineer certifications. Coming in a future update.</p>
           </div>
         </div>
       </div>

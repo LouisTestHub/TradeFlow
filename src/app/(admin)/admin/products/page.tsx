@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
-type Tab = 'ppp' | 'medicine';
+type Tab = 'parts' | 'equipment';
 
 interface Product {
   id: string;
@@ -12,7 +12,7 @@ interface Product {
 }
 
 export default function AdminProductsPage() {
-  const [tab, setTab] = useState<Tab>('ppp');
+  const [tab, setTab] = useState<Tab>('parts');
   const [products, setProducts] = useState<Product[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -75,16 +75,16 @@ export default function AdminProductsPage() {
       {/* Tabs */}
       <div className="flex gap-2 mb-4">
         <button
-          onClick={() => { setTab('ppp'); setPage(1); setSearch(''); }}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium min-h-[48px] transition-colors ${tab === 'ppp' ? 'bg-primary text-white' : 'bg-white border border-gray-200 text-slate-600 hover:bg-gray-50'}`}
+          onClick={() => { setTab('parts'); setPage(1); setSearch(''); }}
+          className={`px-4 py-2.5 rounded-xl text-sm font-medium min-h-[48px] transition-colors ${tab === 'parts' ? 'bg-primary text-white' : 'bg-white border border-gray-200 text-slate-600 hover:bg-gray-50'}`}
         >
-          🌾 PPP Products
+          🔩 Parts & Materials
         </button>
         <button
-          onClick={() => { setTab('medicine'); setPage(1); setSearch(''); }}
-          className={`px-4 py-2.5 rounded-xl text-sm font-medium min-h-[48px] transition-colors ${tab === 'medicine' ? 'bg-primary text-white' : 'bg-white border border-gray-200 text-slate-600 hover:bg-gray-50'}`}
+          onClick={() => { setTab('equipment'); setPage(1); setSearch(''); }}
+          className={`px-4 py-2.5 rounded-xl text-sm font-medium min-h-[48px] transition-colors ${tab === 'equipment' ? 'bg-primary text-white' : 'bg-white border border-gray-200 text-slate-600 hover:bg-gray-50'}`}
         >
-          💊 Medicine Products
+          🛠️ Equipment
         </button>
       </div>
 
@@ -103,10 +103,8 @@ export default function AdminProductsPage() {
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50">
                 <th className="text-left py-3 px-4 font-medium text-slate-500">Name</th>
-                <th className="text-left py-3 px-4 font-medium text-slate-500">Active Ingredient</th>
-                {tab === 'ppp' && <th className="text-left py-3 px-4 font-medium text-slate-500">MAPP</th>}
-                {tab === 'medicine' && <th className="text-left py-3 px-4 font-medium text-slate-500">Species</th>}
-                {tab === 'medicine' && <th className="text-left py-3 px-4 font-medium text-slate-500">POM Status</th>}
+                <th className="text-left py-3 px-4 font-medium text-slate-500">Details</th>
+                {tab === 'parts' && <th className="text-left py-3 px-4 font-medium text-slate-500">Part No</th>}
                 <th className="text-left py-3 px-4 font-medium text-slate-500">Actions</th>
               </tr>
             </thead>
@@ -123,9 +121,7 @@ export default function AdminProductsPage() {
                 <tr key={p.id} className="border-b border-gray-50 hover:bg-gray-50/50">
                   <td className="py-3 px-4 font-medium text-slate-800">{p.name}</td>
                   <td className="py-3 px-4 text-slate-600">{p.activeIngredient || '—'}</td>
-                  {tab === 'ppp' && <td className="py-3 px-4 text-slate-600">{(p as Record<string, unknown>).mapp as string || '—'}</td>}
-                  {tab === 'medicine' && <td className="py-3 px-4 text-slate-600">{(p as Record<string, unknown>).species as string || '—'}</td>}
-                  {tab === 'medicine' && <td className="py-3 px-4 text-slate-600">{(p as Record<string, unknown>).pomStatus as string || '—'}</td>}
+                  {tab === 'parts' && <td className="py-3 px-4 text-slate-600">{(p as Record<string, unknown>).partNumber as string || '—'}</td>}
                   <td className="py-3 px-4 flex gap-2">
                     <button
                       onClick={() => { setEditing(p); setShowForm(true); }}
@@ -171,18 +167,18 @@ export default function AdminProductsPage() {
 function ProductForm({ tab, product, onSave, onClose }: { tab: Tab; product: Product | null; onSave: (data: Record<string, string>) => void; onClose: () => void }) {
   const [name, setName] = useState(product?.name || '');
   const [activeIngredient, setActiveIngredient] = useState((product?.activeIngredient as string) || '');
-  const [extra1, setExtra1] = useState(tab === 'ppp' ? ((product as Record<string, unknown>)?.mapp as string || '') : ((product as Record<string, unknown>)?.species as string || ''));
-  const [extra2, setExtra2] = useState(tab === 'ppp' ? ((product as Record<string, unknown>)?.manufacturer as string || '') : ((product as Record<string, unknown>)?.pomStatus as string || ''));
+  const [extra1, setExtra1] = useState(tab === 'parts' ? ((product as Record<string, unknown>)?.partNumber as string || '') : ((product as Record<string, unknown>)?.species as string || ''));
+  const [extra2, setExtra2] = useState(tab === 'parts' ? ((product as Record<string, unknown>)?.manufacturer as string || '') : ((product as Record<string, unknown>)?.stockLevel as string || ''));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const data: Record<string, string> = { name, activeIngredient };
-    if (tab === 'ppp') {
-      data.mapp = extra1;
+    if (tab === 'parts') {
+      data.partNumber = extra1;
       data.manufacturer = extra2;
     } else {
       data.species = extra1;
-      data.pomStatus = extra2;
+      data.stockLevel = extra2;
     }
     onSave(data);
   };
@@ -190,7 +186,7 @@ function ProductForm({ tab, product, onSave, onClose }: { tab: Tab; product: Pro
   return (
     <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div className="bg-white rounded-2xl p-6 max-w-md w-full" onClick={e => e.stopPropagation()}>
-        <h3 className="text-lg font-semibold text-slate-800 mb-4">{product ? 'Edit' : 'Add'} {tab === 'ppp' ? 'PPP' : 'Medicine'} Product</h3>
+        <h3 className="text-lg font-semibold text-slate-800 mb-4">{product ? 'Edit' : 'Add'} {tab === 'parts' ? 'Parts' : 'Medicine'} Product</h3>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <label className="block text-xs font-medium text-slate-500 mb-1">Product Name *</label>
@@ -201,11 +197,11 @@ function ProductForm({ tab, product, onSave, onClose }: { tab: Tab; product: Pro
             <input type="text" value={activeIngredient} onChange={e => setActiveIngredient(e.target.value)} className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm min-h-[48px]" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">{tab === 'ppp' ? 'MAPP Number' : 'Species'}</label>
+            <label className="block text-xs font-medium text-slate-500 mb-1">{tab === 'parts' ? 'Part Number' : 'Species'}</label>
             <input type="text" value={extra1} onChange={e => setExtra1(e.target.value)} className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm min-h-[48px]" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">{tab === 'ppp' ? 'Manufacturer' : 'POM Status'}</label>
+            <label className="block text-xs font-medium text-slate-500 mb-1">{tab === 'parts' ? 'Supplier' : 'Stock Level'}</label>
             <input type="text" value={extra2} onChange={e => setExtra2(e.target.value)} className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm min-h-[48px]" />
           </div>
           <div className="flex gap-3 pt-2">

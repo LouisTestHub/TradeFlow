@@ -3,7 +3,7 @@
 import { ScrollFadeIn } from './ScrollFadeIn';
 import {
   SprayIcon,
-  LivestockIcon,
+  SchedulingIcon,
   WeatherIcon,
   ComplianceIcon,
   OfflineIcon,
@@ -17,7 +17,7 @@ const features = [
     description: 'Create jobs, schedule engineers, track progress. From first call to invoice, manage the entire customer journey in one place.',
   },
   {
-    icon: <LivestockIcon />,
+    icon: <SchedulingIcon />,
     title: 'Engineer Scheduling',
     description: 'Smart scheduling based on skills, location, and availability. Optimise routes, reduce fuel costs, and maximise jobs per day.',
   },

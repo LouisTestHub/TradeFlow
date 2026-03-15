@@ -8,7 +8,7 @@ const alertTypes = [
   { key: 'bcms_overdue', label: 'BCMS movement overdue', desc: 'Day of deadline if not submitted' },
   { key: 'withdrawal_clear', label: 'Withdrawal period clear', desc: 'Day before meat/milk withdrawal ends' },
   { key: 'course_dose', label: 'Course medicine next dose', desc: 'Day of next dose in a course' },
-  { key: 'audit_reminder', label: 'Red Tractor audit reminder', desc: '7 days before scheduled audit' },
+  { key: 'audit_reminder', label: 'Certification audit reminder', desc: '7 days before scheduled audit' },
   { key: 'insurance_expiry', label: 'Insurance expiry warning', desc: '7 days before insurance expires' },
   { key: 'equipment_calibration', label: 'Equipment calibration due', desc: '14 days before calibration due' },
   { key: 'sfi_evidence', label: 'SFI evidence due', desc: '14 days before evidence submission deadline' },

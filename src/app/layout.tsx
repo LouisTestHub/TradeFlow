@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://fieldkeeper.co.uk'),
+  metadataBase: new URL('https://tradeflow.co.uk'),
   title: {
     default: 'TradeFlow — UK Field Service Software | Job Management for Trades',
     template: '%s | TradeFlow',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://fieldkeeper.co.uk',
+    url: 'https://tradeflow.co.uk',
     siteName: 'TradeFlow',
     title: 'TradeFlow — UK Field Service Platform for Plumbing, Electrical & HVAC',
     description:
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     description: 'Job management, CIS compliance, digital certificates. Built for plumbers, electricians, HVAC engineers.',
   },
   robots: { index: true, follow: true },
-  alternates: { canonical: 'https://fieldkeeper.co.uk' },
+  alternates: { canonical: 'https://tradeflow.co.uk' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -77,7 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               applicationCategory: 'BusinessApplication',
               operatingSystem: 'Web, iOS, Android',
               description: 'Field service management platform for UK plumbers, electricians, and HVAC engineers. Job management, CIS compliance, digital certificates.',
-              url: 'https://fieldkeeper.co.uk',
+              url: 'https://tradeflow.co.uk',
               offers: {
                 '@type': 'AggregateOffer',
                 lowPrice: '39',

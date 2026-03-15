@@ -17,7 +17,7 @@ export default function DashboardHeader({ syncStatus }: DashboardHeaderProps) {
     <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-gray-100 lg:hidden">
       <div className="flex items-center justify-between px-4 h-14">
         <div className="flex items-center gap-2">
-          <span className="text-xl">🌿</span>
+          <span className="text-xl">🔧</span>
           <span className="font-[var(--font-dm-sans)] font-bold text-primary">TradeFlow</span>
         </div>
         <div className="flex items-center gap-3">

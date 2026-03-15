@@ -86,7 +86,7 @@ const jobDescriptions = [
 ];
 
 async function main() {
-  console.log('🌱 Seeding TradeFlow database...');
+  console.log('🔧 Seeding TradeFlow database...');
 
   // Clear existing data in reverse dependency order
   await prisma.jobTimeline.deleteMany();

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/app/', '/admin/', '/api/'],
     },
-    sitemap: 'https://fieldkeeper.co.uk/sitemap.xml',
+    sitemap: 'https://tradeflow.co.uk/sitemap.xml',
   };
 }

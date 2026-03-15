@@ -146,7 +146,7 @@ export default function EquipmentPage() {
             Equipment Register
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Track sprayers, spreaders, and calibration dates for Red Tractor compliance
+            Track tools, testing equipment, and calibration dates for certification compliance
           </p>
         </div>
         <button
@@ -323,7 +323,7 @@ export default function EquipmentPage() {
 
       {/* Info */}
       <div className="bg-blue-50 rounded-2xl border border-blue-100 p-5">
-        <h3 className="text-sm font-bold text-slate-800 mb-2">📋 Red Tractor Requirement</h3>
+        <h3 className="text-sm font-bold text-slate-800 mb-2">📋 Certification Requirement</h3>
         <p className="text-sm text-slate-600">
           All sprayers must have a valid NSTS (National Sprayer Testing Scheme) certificate.
           Calibration is required annually. Equipment with overdue calibration will be flagged on spray records.

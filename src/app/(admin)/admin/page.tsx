@@ -4,15 +4,15 @@ import { useState, useEffect } from 'react';
 
 interface DashboardData {
   stats: {
-    totalFarms: number;
+    totalCompanies: number;
     totalUsers: number;
-    activeFarms: number;
-    trialFarms: number;
+    activeCompanies: number;
+    trialCompanies: number;
     recordsToday: number;
     mrr: number;
     arr: number;
   };
-  recentActivity: { id: string; action: string; entity: string; user: string; farm: string; createdAt: string }[];
+  recentActivity: { id: string; action: string; entity: string; user: string; company: string; createdAt: string }[];
   recentSupport: { id: string; name: string; email: string; message: string; createdAt: string }[];
 }
 
@@ -48,10 +48,10 @@ export default function AdminDashboardPage() {
 
       {/* Platform Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <StatCard label="Total Farms" value={stats?.totalFarms || 0} />
+        <StatCard label="Total Companies" value={stats?.totalCompanies || 0} />
         <StatCard label="Total Users" value={stats?.totalUsers || 0} />
-        <StatCard label="Active (30d)" value={stats?.activeFarms || 0} color="text-green-600" />
-        <StatCard label="Trials" value={stats?.trialFarms || 0} color="text-blue-600" />
+        <StatCard label="Active (30d)" value={stats?.activeCompanies || 0} color="text-green-600" />
+        <StatCard label="Trials" value={stats?.trialCompanies || 0} color="text-blue-600" />
       </div>
 
       {/* Revenue */}
@@ -80,7 +80,7 @@ export default function AdminDashboardPage() {
                 <div className="w-2 h-2 bg-primary rounded-full mt-1.5 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-slate-700">{a.action} {a.entity && `— ${a.entity}`}</p>
-                  <p className="text-xs text-slate-400">{a.user} {a.farm && `• ${a.farm}`} • {timeAgo(a.createdAt)}</p>
+                  <p className="text-xs text-slate-400">{a.user} {a.company && `• ${a.company}`} • {timeAgo(a.createdAt)}</p>
                 </div>
               </div>
             )) : <p className="text-sm text-slate-400">No recent activity</p>}

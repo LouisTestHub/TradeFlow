@@ -1,7 +1,7 @@
 {
-  "name": "FieldKeeper",
-  "short_name": "FieldKeeper",
-  "description": "Farm compliance and record-keeping for UK farmers",
+  "name": "TradeFlow",
+  "short_name": "TradeFlow",
+  "description": "Field service management for UK trades - plumbing, electrical, HVAC, gas, fire protection",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#FAFAF5",

@@ -57,7 +57,7 @@ export default function OfflineIndicator() {
 
   function openDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
-      const req = indexedDB.open('fieldkeeper_offline', 1);
+      const req = indexedDB.open('tradeflow_offline', 1);
       req.onupgradeneeded = () => {
         const db = req.result;
         if (!db.objectStoreNames.contains('sync_queue')) {

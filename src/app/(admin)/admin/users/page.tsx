@@ -9,8 +9,8 @@ interface UserRow {
   role: string;
   phone: string | null;
   createdAt: string;
-  farm: string | null;
-  farmId: string | null;
+  company: string | null;
+  companyId: string | null;
   disabled: boolean;
 }
 
@@ -74,10 +74,10 @@ export default function AdminUsersPage() {
           className="rounded-xl border border-gray-300 px-3 py-2.5 text-sm min-h-[48px]"
         >
           <option value="">All Roles</option>
-          <option value="FARMER">Farmer</option>
-          <option value="FARM_MANAGER">Farm Manager</option>
-          <option value="AGRONOMIST">Agronomist</option>
           <option value="ADMIN">Admin</option>
+          <option value="MANAGER">Manager</option>
+          <option value="OFFICE">Office Staff</option>
+          <option value="ENGINEER">Engineer</option>
         </select>
       </div>
 
@@ -90,7 +90,7 @@ export default function AdminUsersPage() {
                 <th className="text-left py-3 px-4 font-medium text-slate-500">Name</th>
                 <th className="text-left py-3 px-4 font-medium text-slate-500">Email</th>
                 <th className="text-left py-3 px-4 font-medium text-slate-500">Role</th>
-                <th className="text-left py-3 px-4 font-medium text-slate-500">Farm</th>
+                <th className="text-left py-3 px-4 font-medium text-slate-500">Company</th>
                 <th className="text-left py-3 px-4 font-medium text-slate-500">Joined</th>
                 <th className="text-left py-3 px-4 font-medium text-slate-500">Actions</th>
               </tr>
@@ -121,7 +121,7 @@ export default function AdminUsersPage() {
                       'bg-primary/10 text-primary'
                     }`}>{u.role}</span>
                   </td>
-                  <td className="py-3 px-4 text-slate-600">{u.farm || '—'}</td>
+                  <td className="py-3 px-4 text-slate-600">{u.company || '—'}</td>
                   <td className="py-3 px-4 text-slate-500 text-xs">{new Date(u.createdAt).toLocaleDateString('en-GB')}</td>
                   <td className="py-3 px-4">
                     <button
@@ -193,17 +193,17 @@ function UserDetail({ userId, onClose }: { userId: string; onClose: () => void }
           <div><span className="text-slate-500">Email:</span> <span className="font-medium">{data.user.email}</span></div>
           <div><span className="text-slate-500">Role:</span> <span className="font-medium">{data.user.role}</span></div>
           <div><span className="text-slate-500">Phone:</span> <span className="font-medium">{data.user.phone || 'N/A'}</span></div>
-          {data.user.farm && (
-            <div><span className="text-slate-500">Farm:</span> <span className="font-medium">{typeof data.user.farm === 'object' ? data.user.farm?.name : data.user.farm}</span></div>
+          {data.user.company && (
+            <div><span className="text-slate-500">Company:</span> <span className="font-medium">{typeof data.user.company === 'object' ? data.user.company?.name : data.user.company}</span></div>
           )}
           <div><span className="text-slate-500">Joined:</span> <span className="font-medium">{new Date(data.user.createdAt).toLocaleDateString('en-GB')}</span></div>
           {data.stats && (
             <div className="pt-3 border-t border-gray-100">
-              <p className="font-medium text-slate-700 mb-2">Farm Usage</p>
+              <p className="font-medium text-slate-700 mb-2">Activity Summary</p>
               <div className="grid grid-cols-3 gap-3 text-center">
-                <div><p className="text-lg font-bold">{data.stats.sprays}</p><p className="text-xs text-slate-500">Sprays</p></div>
-                <div><p className="text-lg font-bold">{data.stats.medicines}</p><p className="text-xs text-slate-500">Medicine</p></div>
-                <div><p className="text-lg font-bold">{data.stats.movements}</p><p className="text-xs text-slate-500">Movements</p></div>
+                <div><p className="text-lg font-bold">{data.stats.jobs || 0}</p><p className="text-xs text-slate-500">Jobs</p></div>
+                <div><p className="text-lg font-bold">{data.stats.invoices || 0}</p><p className="text-xs text-slate-500">Invoices</p></div>
+                <div><p className="text-lg font-bold">{data.stats.quotes || 0}</p><p className="text-xs text-slate-500">Quotes</p></div>
               </div>
             </div>
           )}

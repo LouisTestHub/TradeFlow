@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 const adminNavItems = [
   { href: '/admin', label: 'Dashboard', icon: '📊' },
   { href: '/admin/users', label: 'Users', icon: '👥' },
-  { href: '/admin/farms', label: 'Farms', icon: '🏠' },
+  { href: '/admin/companies', label: 'Companies', icon: '🏢' },
   { href: '/admin/support', label: 'Support', icon: '🎫' },
   { href: '/admin/analytics', label: 'Analytics', icon: '📈' },
   { href: '/admin/products', label: 'Product DB', icon: '🗄️' },
@@ -20,7 +20,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Top Bar */}
       <header className="bg-slate-900 text-white px-6 py-3 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-3">
-          <span className="text-xl">🌿</span>
+          <span className="text-xl">🔧</span>
           <span className="font-bold text-lg">TradeFlow</span>
           <span className="bg-red-500 text-xs font-bold px-2 py-0.5 rounded-full ml-2">ADMIN</span>
         </div>

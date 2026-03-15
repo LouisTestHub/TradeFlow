@@ -4,10 +4,10 @@ import { useState, useEffect } from 'react';
 
 interface AnalyticsData {
   stats: {
-    totalFarms: number;
+    totalCompanies: number;
     totalUsers: number;
-    activeFarms: number;
-    trialFarms: number;
+    activeCompanies: number;
+    trialCompanies: number;
   };
 }
 
@@ -32,36 +32,36 @@ export default function AdminAnalyticsPage() {
   }
 
   const stats = data?.stats;
-  const totalFarms = stats?.totalFarms || 1;
+  const totalCompanies = stats?.totalCompanies || 1;
 
   // Placeholder analytics data
   const featureUsage = [
     { name: 'Spray Diary', pct: 92 },
-    { name: 'Livestock', pct: 78 },
+    { name: 'Engineers', pct: 78 },
     { name: 'Medicine', pct: 71 },
-    { name: 'Fields & Crops', pct: 95 },
+    { name: 'Jobs & Invoices', pct: 95 },
     { name: 'Fertiliser', pct: 64 },
     { name: 'SFI Actions', pct: 42 },
-    { name: 'Red Tractor', pct: 58 },
+    { name: 'Gas Safe / NICEIC', pct: 58 },
     { name: 'Reports', pct: 35 },
   ];
 
   const regions = [
-    { county: 'Devon', farms: Math.round(totalFarms * 0.15) },
-    { county: 'Somerset', farms: Math.round(totalFarms * 0.12) },
-    { county: 'Yorkshire', farms: Math.round(totalFarms * 0.11) },
-    { county: 'Norfolk', farms: Math.round(totalFarms * 0.09) },
-    { county: 'Shropshire', farms: Math.round(totalFarms * 0.08) },
-    { county: 'Suffolk', farms: Math.round(totalFarms * 0.07) },
-    { county: 'Lincolnshire', farms: Math.round(totalFarms * 0.06) },
-    { county: 'Other', farms: Math.round(totalFarms * 0.32) },
+    { county: 'Devon', companies: Math.round(totalCompanies * 0.15) },
+    { county: 'Somerset', companies: Math.round(totalCompanies * 0.12) },
+    { county: 'Yorkshire', companies: Math.round(totalCompanies * 0.11) },
+    { county: 'Norfolk', companies: Math.round(totalCompanies * 0.09) },
+    { county: 'Shropshire', companies: Math.round(totalCompanies * 0.08) },
+    { county: 'Suffolk', companies: Math.round(totalCompanies * 0.07) },
+    { county: 'Lincolnshire', companies: Math.round(totalCompanies * 0.06) },
+    { county: 'Other', companies: Math.round(totalCompanies * 0.32) },
   ];
 
   const planDistribution = [
-    { plan: 'Free Trial', count: stats?.trialFarms || 0, color: 'bg-blue-500' },
-    { plan: 'Starter (£20/mo)', count: Math.round(totalFarms * 0.25), color: 'bg-green-500' },
-    { plan: 'Standard (£30/mo)', count: Math.round(totalFarms * 0.45), color: 'bg-primary' },
-    { plan: 'Farm Pro (£45/mo)', count: Math.round(totalFarms * 0.12), color: 'bg-amber-500' },
+    { plan: 'Free Trial', count: stats?.trialCompanies || 0, color: 'bg-blue-500' },
+    { plan: 'Starter (£20/mo)', count: Math.round(totalCompanies * 0.25), color: 'bg-green-500' },
+    { plan: 'Standard (£30/mo)', count: Math.round(totalCompanies * 0.45), color: 'bg-primary' },
+    { plan: 'Business Pro (£45/mo)', count: Math.round(totalCompanies * 0.12), color: 'bg-amber-500' },
   ];
 
   return (
@@ -70,7 +70,7 @@ export default function AdminAnalyticsPage() {
 
       {/* Feature Usage */}
       <div className="bg-white rounded-2xl border border-gray-200 p-5 mb-6">
-        <h2 className="font-semibold text-slate-800 mb-4">Feature Usage (% of farms)</h2>
+        <h2 className="font-semibold text-slate-800 mb-4">Feature Usage (% of companies)</h2>
         <div className="space-y-3">
           {featureUsage.map(f => (
             <div key={f.name} className="flex items-center gap-3">
@@ -95,7 +95,7 @@ export default function AdminAnalyticsPage() {
             {regions.map(r => (
               <div key={r.county} className="flex items-center justify-between py-1.5 border-b border-gray-50">
                 <span className="text-sm text-slate-700">{r.county}</span>
-                <span className="text-sm font-medium text-slate-800">{r.farms} farms</span>
+                <span className="text-sm font-medium text-slate-800">{r.companies} companies</span>
               </div>
             ))}
           </div>
@@ -118,7 +118,7 @@ export default function AdminAnalyticsPage() {
               <div
                 key={p.plan}
                 className={`h-6 rounded-full ${p.color}`}
-                style={{ width: `${Math.max(5, (p.count / totalFarms) * 100)}%` }}
+                style={{ width: `${Math.max(5, (p.count / totalCompanies) * 100)}%` }}
                 title={`${p.plan}: ${p.count}`}
               />
             ))}
@@ -140,7 +140,7 @@ export default function AdminAnalyticsPage() {
             </div>
           ))}
         </div>
-        <p className="text-xs text-slate-400 mt-2 text-center">Monthly farm signups (placeholder data)</p>
+        <p className="text-xs text-slate-400 mt-2 text-center">Monthly company signups (placeholder data)</p>
       </div>
     </div>
   );

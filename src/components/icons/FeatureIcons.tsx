@@ -28,7 +28,7 @@ export function SprayIcon({ className = '' }: { className?: string }) {
   );
 }
 
-export function LivestockIcon({ className = '' }: { className?: string }) {
+export function SchedulingIcon({ className = '' }: { className?: string }) {
   return (
     <svg viewBox="0 0 64 64" className={className} width={iconSize} height={iconSize}>
       <rect width="64" height="64" rx="16" fill="#FFF7ED" />
@@ -382,7 +382,7 @@ export function GrantIcon({ className = '' }: { className?: string }) {
 }
 
 // Compliance badges — these are kept in ComplianceBadges.tsx
-export function RedTractorBadge({ className = '' }: { className?: string }) {
+export function CertificationBadge({ className = '' }: { className?: string }) {
   return <GasSafeBadge className={className} />;
 }
 export function BcmsBadge({ className = '' }: { className?: string }) {

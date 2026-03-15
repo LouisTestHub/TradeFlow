@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'TradeFlow privacy policy. How we collect, use, and protect your farm data. UK-hosted. GDPR compliant.',
+  description: 'TradeFlow privacy policy. How we collect, use, and protect your business data. UK-hosted. GDPR compliant.',
 };
 
 export default function PrivacyPage() {
@@ -24,8 +24,8 @@ export default function PrivacyPage() {
             <h2>2. What Data We Collect</h2>
             <p>We collect data you provide when using TradeFlow:</p>
             <ul className="list-disc pl-6 space-y-1">
-              <li><strong>Account data:</strong> Name, email, phone number, farm name</li>
-              <li><strong>Farm data:</strong> CPH number, SBI number, fields, livestock, spray records, medicine records, movements, fertiliser records</li>
+              <li><strong>Account data:</strong> Name, email, phone number, company name</li>
+              <li><strong>Business data:</strong> company number, VAT number, engineers, customers, job records, invoices, certificates, CIS records</li>
               <li><strong>Usage data:</strong> Pages visited, features used, device type</li>
               <li><strong>Contact form submissions:</strong> Name, email, phone, message</li>
             </ul>
@@ -49,7 +49,7 @@ export default function PrivacyPage() {
             </ul>
 
             <h2>5. We Never Sell Your Data</h2>
-            <p>Your farm data is yours. We will never sell, rent, or share your data with third parties for marketing purposes. Period.</p>
+            <p>Your business data is yours. We will never sell, rent, or share your data with third parties for marketing purposes. Period.</p>
 
             <h2>6. Your Rights</h2>
             <p>Under GDPR and UK data protection law, you have the right to:</p>
@@ -69,7 +69,7 @@ export default function PrivacyPage() {
             <p>We retain your data for as long as your account is active. If you cancel, we retain data for 90 days (in case you return), then permanently delete it. You can request immediate deletion at any time.</p>
 
             <h2>9. Contact Us</h2>
-            <p>Data Protection Officer: <a href="mailto:privacy@fieldkeeper.co.uk" className="text-[#1B5E20] hover:underline">privacy@fieldkeeper.co.uk</a></p>
+            <p>Data Protection Officer: <a href="mailto:privacy@tradeflow.co.uk" className="text-[#1B5E20] hover:underline">privacy@tradeflow.co.uk</a></p>
             <p>Data & Digital Ltd, 1 Tech Lane, Bristol, BS1 1AA</p>
           </div>
         </div>

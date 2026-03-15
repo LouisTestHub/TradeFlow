@@ -16,7 +16,7 @@ export default function GlobalError({
   return (
     <div className="min-h-screen bg-[#FAFAF5] flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
-        <div className="text-6xl mb-4">🌿</div>
+        <div className="text-6xl mb-4">⚠️</div>
         <h1 className="text-2xl font-bold text-slate-800 mb-2">Something went wrong</h1>
         <p className="text-slate-500 mb-6 text-sm">
           We hit an unexpected issue. This has been logged and we&apos;ll look into it.

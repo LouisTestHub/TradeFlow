@@ -7,7 +7,7 @@ interface Ticket {
   name: string;
   email: string;
   phone: string | null;
-  farmName: string | null;
+  companyName: string | null;
   message: string;
   source: string | null;
   createdAt: string;
@@ -62,7 +62,7 @@ export default function AdminSupportPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <p className="font-semibold text-slate-800">{t.name}</p>
-                  {t.farmName && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{t.farmName}</span>}
+                  {t.companyName && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{t.companyName}</span>}
                 </div>
                 <p className="text-sm text-slate-600 truncate">{t.message}</p>
               </div>

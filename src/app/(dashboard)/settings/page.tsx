@@ -4,15 +4,15 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 interface SettingsData {
-  farm: {
+  company: {
     id: string;
     name: string;
-    cphNumber: string | null;
-    sbiNumber: string | null;
+    companyNumber: string | null;
+    vatNumber: string | null;
     county: string | null;
     postcode: string | null;
-    totalHectares: number | null;
-    farmType: string | null;
+    engineerCount: number | null;
+    businessType: string | null;
   };
   team: Array<{
     id: string;
@@ -27,7 +27,7 @@ interface SettingsData {
 
 type SettingsTab = 'profile' | 'team' | 'notifications' | 'data';
 
-const farmTypes = ['arable', 'livestock', 'mixed', 'dairy', 'poultry', 'organic', 'other'];
+const businessTypes = ['plumbing', 'heating', 'electrical', 'hvac', 'gas', 'multi-trade'];
 
 export default function SettingsPage() {
   const [data, setData] = useState<SettingsData | null>(null);
@@ -44,7 +44,7 @@ export default function SettingsPage() {
       .catch(() => setLoading(false));
   }, []);
 
-  async function handleSaveFarm(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSaveCompany(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSaving(true);
     setSaveMsg('');
@@ -52,12 +52,12 @@ export default function SettingsPage() {
     const form = new FormData(e.currentTarget);
     const body = {
       name: form.get('name'),
-      cphNumber: form.get('cphNumber') || null,
-      sbiNumber: form.get('sbiNumber') || null,
+      companyNumber: form.get('companyNumber') || null,
+      vatNumber: form.get('vatNumber') || null,
       county: form.get('county') || null,
       postcode: form.get('postcode') || null,
-      totalHectares: form.get('totalHectares') || null,
-      farmType: form.get('farmType') || null,
+      engineerCount: form.get('engineerCount') || null,
+      businessType: form.get('businessType') || null,
     };
 
     try {
@@ -119,14 +119,14 @@ export default function SettingsPage() {
   }
 
   const tabItems: { key: SettingsTab; label: string; icon: string }[] = [
-    { key: 'profile', label: 'Farm Profile', icon: '🏠' },
+    { key: 'profile', label: 'Company Profile', icon: '🏢' },
     { key: 'team', label: 'Team', icon: '👥' },
     { key: 'notifications', label: 'Notifications', icon: '🔔' },
     { key: 'data', label: 'Data & Privacy', icon: '🔒' },
   ];
 
   const quickLinks = [
-    { href: '/settings/equipment', label: 'Equipment Register', icon: '🚜', desc: 'Sprayers, spreaders, calibration dates' },
+    { href: '/settings/equipment', label: 'Equipment Register', icon: '🔧', desc: 'Tools, testing equipment, calibration' },
   ];
 
   return (
@@ -168,9 +168,9 @@ export default function SettingsPage() {
         ))}
       </div>
 
-      {/* Farm Profile */}
+      {/* Company Profile */}
       {activeTab === 'profile' && (
-        <form onSubmit={handleSaveFarm} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
+        <form onSubmit={handleSaveCompany} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
           {saveMsg && (
             <div className={`text-sm p-3 rounded-xl border ${saveMsg.includes('Error') ? 'bg-red-50 text-red-700 border-red-100' : 'bg-green-50 text-green-700 border-green-100'}`}>
               {saveMsg}
@@ -178,42 +178,42 @@ export default function SettingsPage() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Farm Name *</label>
-            <input name="name" type="text" required defaultValue={data.farm.name} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" />
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Company Name *</label>
+            <input name="name" type="text" required defaultValue={data.company.name} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">CPH Number</label>
-              <input name="cphNumber" type="text" defaultValue={data.farm.cphNumber || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" placeholder="12/345/6789" />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Company Number</label>
+              <input name="companyNumber" type="text" defaultValue={data.company.companyNumber || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" placeholder="12345678" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">SBI Number</label>
-              <input name="sbiNumber" type="text" defaultValue={data.farm.sbiNumber || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" placeholder="123456789" />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">VAT Number</label>
+              <input name="vatNumber" type="text" defaultValue={data.company.vatNumber || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" placeholder="GB123456789" />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">County</label>
-              <input name="county" type="text" defaultValue={data.farm.county || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" />
+              <input name="county" type="text" defaultValue={data.company.county || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" />
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1.5">Postcode</label>
-              <input name="postcode" type="text" defaultValue={data.farm.postcode || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" />
+              <input name="postcode" type="text" defaultValue={data.company.postcode || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Total Hectares</label>
-              <input name="totalHectares" type="number" step="0.1" defaultValue={data.farm.totalHectares || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" />
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Number of Engineers</label>
+              <input name="engineerCount" type="number" defaultValue={data.company.engineerCount || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Farm Type</label>
-              <select name="farmType" defaultValue={data.farm.farmType || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]">
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Business Type</label>
+              <select name="businessType" defaultValue={data.company.businessType || ''} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-base min-h-[48px]">
                 <option value="">Select type...</option>
-                {farmTypes.map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
+                {businessTypes.map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
               </select>
             </div>
           </div>
@@ -252,9 +252,10 @@ export default function SettingsPage() {
               <div>
                 <label className="block text-xs font-medium text-slate-500 mb-1">Role</label>
                 <select name="role" required className="w-full px-3 py-2.5 rounded-xl border border-gray-200 text-sm min-h-[44px]">
-                  <option value="worker">Worker</option>
+                  <option value="engineer">Engineer</option>
                   <option value="manager">Manager</option>
-                  <option value="agronomist">Agronomist (read-only)</option>
+                  <option value="office">Office Staff</option>
+                  <option value="apprentice">Apprentice (limited access)</option>
                 </select>
               </div>
               <div className="flex gap-2">
@@ -344,7 +345,7 @@ export default function SettingsPage() {
 
           <div className="bg-gray-50 rounded-xl p-4 space-y-3">
             <h3 className="text-sm font-semibold text-slate-700">Export Your Data</h3>
-            <p className="text-sm text-slate-500">Download all your farm records as CSV files.</p>
+            <p className="text-sm text-slate-500">Download all your company records as CSV files.</p>
             <button className="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-gray-50 min-h-[44px]">
               📥 Export All Data (CSV)
             </button>
@@ -353,7 +354,7 @@ export default function SettingsPage() {
           <div className="bg-gray-50 rounded-xl p-4 space-y-3">
             <h3 className="text-sm font-semibold text-slate-700">Data Retention</h3>
             <p className="text-sm text-slate-500">
-              Compliance records (spray diaries, medicine records, movements) are retained for a minimum of 5 years as required by Red Tractor and UK regulations.
+              Compliance records (job records, certificates, CIS records) are retained for a minimum of 7 years as required by HMRC and UK regulations.
               Personal data is processed in accordance with our privacy policy.
             </p>
           </div>
