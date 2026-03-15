@@ -1,0 +1,648 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== USERS & AUTH ====================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String?
+  phone         String?
+  avatar        String?
+  role          String    @default("FARMER") // FARMER, FARM_MANAGER, AGRONOMIST, ADMIN, SUPPORT
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions        Session[]
+  accounts        Account[]
+  farmMemberships FarmMembership[]
+  auditLogs       AuditLog[]
+  notifications   Notification[]
+  smsAlerts       SmsAlert[]
+  sprayRecords    SprayRecord[]    @relation("operator")
+  fertRecords     FertiliserRecord[] @relation("fertOperator")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ==================== FARMS ====================
+
+model Farm {
+  id            String   @id @default(cuid())
+  name          String
+  cphNumber     String?  // County Parish Holding e.g. 12/345/6789
+  sbiNumber     String?  // Single Business Identifier
+  county        String?
+  postcode      String?
+  totalHectares Float?
+  farmType      String?  // arable, livestock, mixed, dairy, organic
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  memberships      FarmMembership[]
+  fields           Field[]
+  animals          Animal[]
+  animalGroups     AnimalGroup[]
+  sprayRecords     SprayRecord[]
+  equipment        Equipment[]
+  medicineRecords  MedicineRecord[]
+  movements        Movement[]
+  breedingRecords  BreedingRecord[]
+  fertRecords      FertiliserRecord[]
+  nutrientPlans    NutrientPlan[]
+  sfiAgreements    SfiAgreement[]
+  auditChecklists  AuditChecklist[]
+  complianceAlerts ComplianceAlert[]
+  weatherStations  WeatherStation[]
+  auditLogs        AuditLog[]
+  vetContacts      VetContact[]
+}
+
+model FarmMembership {
+  id     String @id @default(cuid())
+  userId String
+  farmId String
+  role   String @default("owner") // owner, manager, worker, agronomist
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  farm Farm @relation(fields: [farmId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, farmId])
+}
+
+// ==================== FIELDS & LAND ====================
+
+model Field {
+  id          String  @id @default(cuid())
+  farmId      String
+  name        String
+  fieldNumber String?
+  hectares    Float
+  cropType    String?
+  soilType    String?
+  nvzZone     Boolean @default(false)
+  geometry    String? // GeoJSON stored as text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  farm           Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  seasons        FieldSeason[]
+  soilTests      SoilTest[]
+  sprayRecords   SprayRecord[]
+  fertRecords    FertiliserRecord[]
+  nutrientPlans  NutrientPlan[]
+  sfiActions     SfiAction[]
+}
+
+model FieldSeason {
+  id           String    @id @default(cuid())
+  fieldId      String
+  year         Int
+  crop         String
+  variety      String?
+  plantingDate DateTime?
+  harvestDate  DateTime?
+  yieldTonnes  Float?
+
+  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+}
+
+model SoilTest {
+  id            String   @id @default(cuid())
+  fieldId       String
+  date          DateTime
+  ph            Float?
+  pIndex        Int?
+  kIndex        Int?
+  mgIndex       Int?
+  organicMatter Float?
+
+  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+}
+
+// ==================== SPRAY RECORDS ====================
+
+model SprayRecord {
+  id                String   @id @default(cuid())
+  farmId            String
+  fieldId           String
+  date              DateTime
+  operatorId        String
+  equipmentId       String?
+  weatherSnapshotId String?  @unique
+  startTime         String?
+  endTime           String?
+  areaTreatedHa     Float?
+  reason            String?
+  notes             String?
+  status            String   @default("draft") // draft, complete
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  farm            Farm          @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  field           Field         @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  operator        User          @relation("operator", fields: [operatorId], references: [id])
+  equipment       Equipment?    @relation(fields: [equipmentId], references: [id])
+  weatherSnapshot SprayWeather? @relation(fields: [weatherSnapshotId], references: [id])
+  products        SprayProduct[]
+}
+
+model SprayProduct {
+  id               String  @id @default(cuid())
+  sprayRecordId    String
+  productName      String
+  activeIngredient String?
+  doseRate         Float?
+  doseUnit         String? // l/ha, kg/ha, ml/ha
+  areaTreated      Float?
+  batchNumber      String?
+  mapp             String? // MAPP number
+
+  sprayRecord SprayRecord @relation(fields: [sprayRecordId], references: [id], onDelete: Cascade)
+}
+
+model SprayWeather {
+  id              String  @id @default(cuid())
+  tempC           Float?
+  windSpeedKmh    Float?
+  windDirection   String?
+  humidityPct     Float?
+  rainLast24hMm   Float?
+  source          String? // manual, sencrop, metoffice
+
+  sprayRecord SprayRecord?
+}
+
+model PppProduct {
+  id               String  @id @default(cuid())
+  name             String
+  mapp             String? // MAPP registration number
+  activeIngredient String?
+  formulation      String?
+  manufacturer     String?
+  crops            String? // comma-separated
+  maxDoseRate      Float?
+  doseUnit         String?
+  harvestInterval  Int?    // days
+  bufferZone       Int?    // metres
+  aquaticSafe      Boolean @default(false)
+  approvalExpiry   DateTime?
+}
+
+// ==================== EQUIPMENT ====================
+
+model Equipment {
+  id              String    @id @default(cuid())
+  farmId          String
+  name            String
+  type            String    // sprayer, spreader, drill, other
+  nozzleType      String?
+  tankCapacity    Float?
+  calibrationDate DateTime?
+  motExpiry       DateTime?
+  notes           String?
+  createdAt       DateTime  @default(now())
+
+  farm         Farm          @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  sprayRecords SprayRecord[]
+  fertRecords  FertiliserRecord[] @relation("fertEquipment")
+}
+
+// ==================== LIVESTOCK ====================
+
+model AnimalGroup {
+  id        String   @id @default(cuid())
+  farmId    String
+  name      String
+  species   String?  // cattle, sheep, or null for any
+  createdAt DateTime @default(now())
+
+  farm    Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  animals Animal[]
+}
+
+model Animal {
+  id             String    @id @default(cuid())
+  farmId         String
+  earTag         String
+  eidNumber      String?
+  species        String    // cattle, sheep, goat, pig
+  breed          String?
+  sex            String?   // male, female
+  dob            DateTime?
+  damId          String?
+  sireId         String?
+  status         String    @default("alive") // alive, dead, sold, moved
+  groupId        String?
+  passportNumber String?
+  purchaseDate   DateTime?
+  purchaseFrom   String?
+  purchasePrice  Float?
+  notes          String?
+  deathDate      DateTime?
+  soldDate       DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  farm             Farm              @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  group            AnimalGroup?      @relation(fields: [groupId], references: [id])
+  medicineRecords  AnimalMedicine[]
+  movementAnimals  MovementAnimal[]
+  breedingAsDam    BreedingRecord[]  @relation("breedingDam")
+  breedingAsSire   BreedingRecord[]  @relation("breedingSire")
+  breedingAsCalf   BreedingRecord[]  @relation("breedingCalf")
+}
+
+model AnimalMedicine {
+  id               String @id @default(cuid())
+  animalId         String
+  medicineRecordId String
+
+  animal         Animal         @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  medicineRecord MedicineRecord @relation(fields: [medicineRecordId], references: [id], onDelete: Cascade)
+
+  @@unique([animalId, medicineRecordId])
+}
+
+model MovementAnimal {
+  id         String @id @default(cuid())
+  animalId   String
+  movementId String
+
+  animal   Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  movement Movement @relation(fields: [movementId], references: [id], onDelete: Cascade)
+
+  @@unique([animalId, movementId])
+}
+
+// ==================== MOVEMENTS ====================
+
+model Movement {
+  id              String   @id @default(cuid())
+  farmId          String
+  fromCph         String
+  toCph           String
+  date            DateTime
+  haulier         String?
+  vehicleReg      String?
+  movementType    String   // on, off, between
+  animalCount     Int      @default(1)
+  species         String?
+  bcmsSubmitted   Boolean  @default(false)
+  bcmsRef         String?
+  departureTime   String?
+  journeyDuration Float?   // hours
+  standstillEnd   DateTime?
+  notes           String?
+  createdAt       DateTime @default(now())
+
+  farm    Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  animals MovementAnimal[]
+}
+
+model BreedingRecord {
+  id              String    @id @default(cuid())
+  farmId          String
+  damId           String
+  sireId          String?
+  sireName        String?   // for AI bull manual entry
+  serviceDate     DateTime?
+  method          String?   // natural, ai
+  expectedCalving DateTime?
+  calvingDate     DateTime?
+  calfId          String?
+  calfSex         String?
+  calfBreed       String?
+  calfWeight      Float?
+  assisted        Boolean   @default(false)
+  presentation    String?
+  notes           String?
+  createdAt       DateTime  @default(now())
+
+  farm Farm    @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  dam  Animal  @relation("breedingDam", fields: [damId], references: [id], onDelete: Cascade)
+  sire Animal? @relation("breedingSire", fields: [sireId], references: [id])
+  calf Animal? @relation("breedingCalf", fields: [calfId], references: [id])
+}
+
+// ==================== MEDICINE RECORDS ====================
+
+model MedicineRecord {
+  id                    String   @id @default(cuid())
+  farmId                String
+  date                  DateTime
+  productName           String
+  batchNumber           String?
+  dose                  String?
+  doseNumeric           Float?
+  doseUnit              String?  // ml, mg, tablets
+  route                 String?  // oral, injection, pour-on, intramammary, topical, iv, intranasal
+  withdrawalMeatDays    Int?
+  withdrawalMilkDays    Int?
+  withdrawalEndMeat     DateTime?
+  withdrawalEndMilk     DateTime?
+  withdrawalEndDate     DateTime?
+  vetId                 String?
+  vetName               String?
+  reason                String?
+  notes                 String?
+  animalWeight          Float?
+  expiryDate            String?
+  isCourse              Boolean  @default(false)
+  courseDoses           Int?
+  courseIntervalHours    Int?
+  courseCurrentDose      Int?     @default(1)
+  productId             String?
+  createdAt             DateTime @default(now())
+
+  farm    Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  vet     VetContact?      @relation(fields: [vetId], references: [id])
+  animals AnimalMedicine[]
+}
+
+model VetContact {
+  id         String   @id @default(cuid())
+  farmId     String
+  name       String
+  practice   String?
+  phone      String?
+  email      String?
+  rcvsNumber String?
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  farm             Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  medicineRecords  MedicineRecord[]
+}
+
+model VetMedicine {
+  id                 String  @id @default(cuid())
+  name               String
+  activeIngredient   String?
+  species            String? // cattle, sheep, all
+  defaultDose        String?
+  route              String?
+  withdrawalMeatDays Int?
+  withdrawalMilkDays Int?
+  pomStatus          String? // POM-V, POM-VPS, NFA-VPS, AVM-GSL
+  manufacturer       String?
+}
+
+// ==================== FERTILISER / NUTRIENT ====================
+
+model FertiliserRecord {
+  id                    String   @id @default(cuid())
+  farmId                String
+  fieldId               String
+  date                  DateTime
+  productType           String   // chemical, organic, fym, slurry, sewage_sludge, compost
+  productName           String?
+  rateKgHa              Float?
+  rateUnit              String?  // kg/ha, t/ha, m3/ha
+  nContent              Float?   // N kg/ha applied (available for organic)
+  pContent              Float?   // P2O5 kg/ha
+  kContent              Float?   // K2O kg/ha
+  nPercent              Float?   // N% analysis (chemical)
+  pPercent              Float?   // P2O5% analysis
+  kPercent              Float?   // K2O% analysis
+  method                String?  // broadcast, band, foliar, injected, surface, trailing_shoe
+  operatorId            String?
+  equipmentId           String?
+  areaTreatedHa         Float?
+  soilCondition         String?  // dry, moist, wet, waterlogged, frozen, snow_covered
+  distanceFromWater     Float?   // metres
+  notes                 String?
+  nvzCompliant          Boolean  @default(true)
+  createdAt             DateTime @default(now())
+
+  farm     Farm       @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  field    Field      @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  operator User?      @relation("fertOperator", fields: [operatorId], references: [id])
+  equipment Equipment? @relation("fertEquipment", fields: [equipmentId], references: [id])
+}
+
+model NutrientPlan {
+  id           String  @id @default(cuid())
+  farmId       String
+  fieldId      String
+  year         Int
+  plannedN     Float?
+  plannedP     Float?
+  plannedK     Float?
+  actualN      Float?
+  actualP      Float?
+  actualK      Float?
+  nvzCompliant Boolean @default(true)
+
+  farm  Farm  @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+}
+
+// ==================== SFI ====================
+
+model SfiAgreement {
+  id                 String   @id @default(cuid())
+  farmId             String
+  sfiRef             String?
+  startDate          DateTime
+  endDate            DateTime
+  totalAnnualPayment Float?
+  status             String   @default("active") // active, expired, pending
+
+  farm    Farm        @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  actions SfiAction[]
+}
+
+model SfiAction {
+  id               String  @id @default(cuid())
+  agreementId      String
+  actionCode       String
+  actionName       String
+  fieldId          String?
+  hectares         Float?
+  paymentPerHa     Float?
+  evidenceRequired String?
+
+  agreement SfiAgreement @relation(fields: [agreementId], references: [id], onDelete: Cascade)
+  field     Field?       @relation(fields: [fieldId], references: [id])
+  evidence  SfiEvidence[]
+}
+
+model SfiEvidence {
+  id          String   @id @default(cuid())
+  actionId    String
+  date        DateTime
+  description String?
+  photoUrl    String?
+  geoLat      Float?
+  geoLng      Float?
+  status      String   @default("draft") // draft, submitted
+
+  action SfiAction @relation(fields: [actionId], references: [id], onDelete: Cascade)
+}
+
+// ==================== RED TRACTOR AUDIT ====================
+
+model AuditChecklist {
+  id        String   @id @default(cuid())
+  farmId    String
+  scheme    String   // red_tractor, organic, other
+  auditDate DateTime?
+  auditor   String?
+  status    String   @default("prep") // prep, in_progress, passed, failed
+
+  farm  Farm        @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  items AuditItem[]
+}
+
+model AuditItem {
+  id            String  @id @default(cuid())
+  checklistId   String
+  requirement   String
+  category      String?
+  status        String  @default("pending") // compliant, non_compliant, na, pending
+  evidenceUrl   String?
+  notes         String?
+
+  checklist AuditChecklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+}
+
+model ComplianceAlert {
+  id       String    @id @default(cuid())
+  farmId   String
+  type     String    // deadline, expiry, missing_record
+  message  String
+  dueDate  DateTime?
+  resolved Boolean   @default(false)
+  createdAt DateTime @default(now())
+
+  farm Farm @relation(fields: [farmId], references: [id], onDelete: Cascade)
+}
+
+// ==================== WEATHER ====================
+
+model WeatherStation {
+  id         String @id @default(cuid())
+  farmId     String
+  provider   String // sencrop, metoffice, manual
+  stationRef String?
+  lat        Float?
+  lng        Float?
+
+  farm     Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  readings WeatherReading[]
+}
+
+model WeatherReading {
+  id            String   @id @default(cuid())
+  stationId     String
+  timestamp     DateTime
+  tempC         Float?
+  humidity      Float?
+  windSpeed     Float?
+  windDirection String?
+  rainfallMm    Float?
+  pressureHpa   Float?
+
+  station WeatherStation @relation(fields: [stationId], references: [id], onDelete: Cascade)
+}
+
+// ==================== NOTIFICATIONS ====================
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // info, warning, deadline, system
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  actionUrl String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SmsAlert {
+  id      String    @id @default(cuid())
+  userId  String
+  phone   String
+  message String
+  sentAt  DateTime?
+  status  String    @default("pending") // pending, sent, failed
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== AUDIT LOG ====================
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  farmId    String?
+  action    String
+  entity    String?
+  entityId  String?
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+  farm Farm? @relation(fields: [farmId], references: [id])
+}
+
+// ==================== CONTACT FORM ====================
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  farmName  String?
+  message   String
+  source    String?  // utm_source
+  medium    String?  // utm_medium
+  campaign  String?  // utm_campaign
+  device    String?
+  createdAt DateTime @default(now())
+}

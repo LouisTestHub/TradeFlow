@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1B5E20;
+  --color-primary-light: #2E7D32;
+  --color-accent: #F9A825;
+  --color-cream: #FAFAF5;
+  --color-slate-dark: #1E293B;
+  --font-heading: 'DM Sans', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-8px) rotate(2deg); }
+  66% { transform: translateY(-4px) rotate(-1deg); }
+}
+
+@keyframes leaf-drift {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.7; }
+  25% { transform: translateY(-20px) translateX(10px) rotate(45deg); opacity: 0.5; }
+  50% { transform: translateY(-10px) translateX(-5px) rotate(90deg); opacity: 0.3; }
+  75% { transform: translateY(-30px) translateX(15px) rotate(135deg); opacity: 0.2; }
+  100% { transform: translateY(-40px) translateX(0) rotate(180deg); opacity: 0; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Floating animation utility */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+/* FAQ accordion */
+details summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] summary .faq-chevron {
+  transform: rotate(180deg);
+}
+
+.faq-chevron {
+  transition: transform 0.2s ease;
+}
+
+/* Leaf particles */
+.leaf-particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #4CAF50;
+  border-radius: 0 50% 50% 50%;
+  opacity: 0;
+  animation: leaf-drift 8s ease-in-out infinite;
+}
+
+.leaf-particle:nth-child(1) { left: 10%; top: 80%; animation-delay: 0s; }
+.leaf-particle:nth-child(2) { left: 30%; top: 85%; animation-delay: 2s; }
+.leaf-particle:nth-child(3) { left: 50%; top: 90%; animation-delay: 4s; }
+.leaf-particle:nth-child(4) { left: 70%; top: 82%; animation-delay: 1s; }
+.leaf-particle:nth-child(5) { left: 85%; top: 88%; animation-delay: 3s; }
+.leaf-particle:nth-child(6) { left: 20%; top: 75%; animation-delay: 5s; }
+
+/* Quick action sheet slide up */
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Safe area padding for mobile bottom nav */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
