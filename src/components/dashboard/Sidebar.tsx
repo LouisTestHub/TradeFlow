@@ -6,14 +6,15 @@ import OfflineIndicator from './OfflineIndicator';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
-  { href: '/fields', label: 'Fields & Crops', icon: '🌾' },
-  { href: '/sprays', label: 'Spray Diary', icon: '📝' },
-  { href: '/livestock', label: 'Livestock', icon: '🐄' },
-  { href: '/medicine', label: 'Medicine & Vet', icon: '💊' },
-  { href: '/fertiliser', label: 'Fertiliser & Nutrients', icon: '🌱' },
-  { href: '/sfi', label: 'SFI Actions', icon: '🎯' },
-  { href: '/red-tractor', label: 'Red Tractor', icon: '✅' },
-  { href: '/calendar', label: 'Compliance Calendar', icon: '📅' },
+  { href: '/jobs', label: 'Jobs', icon: '📋' },
+  { href: '/engineers', label: 'Engineers', icon: '👷' },
+  { href: '/customers', label: 'Customers', icon: '👥' },
+  { href: '/quotes', label: 'Quotes', icon: '📝' },
+  { href: '/invoices', label: 'Invoices', icon: '💰' },
+  { href: '/certificates', label: 'Certificates', icon: '📜' },
+  { href: '/fleet', label: 'Fleet', icon: '🚐' },
+  { href: '/cis', label: 'CIS Tax', icon: '💷' },
+  { href: '/calendar', label: 'Calendar', icon: '📅' },
   { href: '/reports', label: 'Reports', icon: '📊' },
   { href: '/settings', label: 'Settings', icon: '⚙️' },
 ];

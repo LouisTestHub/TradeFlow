@@ -6,7 +6,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen bg-[#FAFAF5]">
       {/* Desktop Sidebar */}
-      <Sidebar farmName="Oakfield Farm" userName="James Thompson" syncStatus="online" />
+      <Sidebar farmName="TradeFlow Services" userName="Admin" syncStatus="online" />
 
       {/* Mobile Header */}
       <DashboardHeader syncStatus="online" />

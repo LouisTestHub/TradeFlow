@@ -1,43 +1,44 @@
+'use client';
+
 import Link from 'next/link';
 
-const menuItems = [
-  { href: '/dashboard', icon: '🏠', label: 'Dashboard' },
-  { href: '/fields', icon: '🌾', label: 'Fields & Crops' },
-  { href: '/sprays', icon: '📝', label: 'Spray Diary' },
-  { href: '/livestock', icon: '🐄', label: 'Livestock' },
-  { href: '/medicine', icon: '💊', label: 'Medicine & Vet' },
-  { href: '/fertiliser', icon: '🌱', label: 'Fertiliser & Nutrients' },
-  { href: '/sfi', icon: '🎯', label: 'SFI Actions' },
-  { href: '/red-tractor', icon: '✅', label: 'Red Tractor' },
-  { href: '/calendar', icon: '📅', label: 'Compliance Calendar' },
-  { href: '/reports', icon: '📊', label: 'Reports' },
-  { href: '/settings', icon: '⚙️', label: 'Settings' },
+const moreItems = [
+  { href: '/customers', label: 'Customers', icon: '👥', description: 'Manage customer database' },
+  { href: '/quotes', label: 'Quotes', icon: '📝', description: 'View and create quotes' },
+  { href: '/invoices', label: 'Invoices', icon: '💰', description: 'Manage invoices and payments' },
+  { href: '/certificates', label: 'Certificates', icon: '📜', description: 'Gas Safe, NICEIC, F-Gas certificates' },
+  { href: '/fleet', label: 'Fleet', icon: '🚐', description: 'Vehicle and fleet management' },
+  { href: '/cis', label: 'CIS Tax', icon: '💷', description: 'CIS tax records and submissions' },
+  { href: '/calendar', label: 'Calendar', icon: '📅', description: 'Schedule and calendar view' },
+  { href: '/reports', label: 'Reports', icon: '📊', description: 'Business reports and analytics' },
+  { href: '/settings', label: 'Settings', icon: '⚙️', description: 'App settings and preferences' },
 ];
 
 export default function MorePage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-800 font-[var(--font-dm-sans)]">Menu</h1>
-      <div className="space-y-1">
-        {menuItems.map((item) => (
+      <div>
+        <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 font-[var(--font-dm-sans)]">More</h1>
+        <p className="text-slate-500 mt-1">Additional features and tools</p>
+      </div>
+
+      <div className="grid gap-3">
+        {moreItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
-            className="flex items-center gap-3 px-4 py-4 bg-white rounded-2xl border border-gray-100 hover:shadow-sm transition-shadow min-h-[56px]"
+            className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all min-h-[72px]"
           >
-            <span className="text-xl w-8 text-center">{item.icon}</span>
-            <span className="text-base font-medium text-slate-700">{item.label}</span>
-            <span className="ml-auto text-slate-300">›</span>
+            <span className="text-3xl w-14 h-14 flex items-center justify-center bg-gray-50 rounded-xl flex-shrink-0">
+              {item.icon}
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-base font-semibold text-slate-800">{item.label}</p>
+              <p className="text-sm text-slate-500 mt-0.5">{item.description}</p>
+            </div>
+            <span className="text-slate-300 flex-shrink-0">→</span>
           </Link>
         ))}
-      </div>
-      <div className="pt-4">
-        <Link
-          href="/login"
-          className="flex items-center justify-center gap-2 px-4 py-3 border border-red-200 text-red-600 rounded-2xl text-sm font-medium hover:bg-red-50 min-h-[48px]"
-        >
-          Sign Out
-        </Link>
       </div>
     </div>
   );

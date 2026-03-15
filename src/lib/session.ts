@@ -8,8 +8,8 @@ export async function getSessionUser() {
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
     include: {
-      farmMemberships: {
-        include: { farm: true },
+      companyUsers: {
+        include: { company: true },
       },
     },
   });
@@ -17,12 +17,12 @@ export async function getSessionUser() {
   return user;
 }
 
-export async function getSessionFarm() {
+export async function getSessionCompany() {
   const user = await getSessionUser();
   if (!user) return null;
   
-  const membership = user.farmMemberships[0];
+  const membership = user.companyUsers[0];
   if (!membership) return null;
   
-  return { user, farm: membership.farm, role: membership.role };
+  return { user, company: membership.company, role: membership.role };
 }

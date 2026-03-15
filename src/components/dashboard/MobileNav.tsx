@@ -6,18 +6,18 @@ import { useState } from 'react';
 
 const tabs = [
   { href: '/dashboard', label: 'Home', icon: '🏠' },
-  { href: '/fields', label: 'Fields', icon: '🌾' },
-  { href: '#record', label: 'Record', icon: '➕', isAction: true },
-  { href: '/livestock', label: 'Stock', icon: '🐄' },
-  { href: '/more', label: 'More', icon: '📋' },
+  { href: '/jobs', label: 'Jobs', icon: '📋' },
+  { href: '#add', label: 'Add', icon: '➕', isAction: true },
+  { href: '/engineers', label: 'Engineers', icon: '👷' },
+  { href: '/more', label: 'More', icon: '⋯' },
 ];
 
 const quickActions = [
-  { href: '/sprays/new', label: 'Spray Application', icon: '🌿' },
-  { href: '/medicine/new', label: 'Medicine Treatment', icon: '💊' },
-  { href: '/livestock/movements/new', label: 'Livestock Movement', icon: '🚛' },
-  { href: '/fertiliser/new', label: 'Fertiliser Application', icon: '🌱' },
-  { href: '/sfi/evidence/new', label: 'SFI Evidence', icon: '📸' },
+  { href: '/jobs/new', label: 'New Job', icon: '📋' },
+  { href: '/quotes/new', label: 'New Quote', icon: '📝' },
+  { href: '/invoices/new', label: 'New Invoice', icon: '💰' },
+  { href: '/customers/new', label: 'New Customer', icon: '👤' },
+  { href: '/engineers/new', label: 'Add Engineer', icon: '👷' },
 ];
 
 export default function MobileNav() {

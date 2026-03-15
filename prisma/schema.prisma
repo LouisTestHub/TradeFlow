@@ -16,19 +16,17 @@ model User {
   passwordHash  String?
   phone         String?
   avatar        String?
-  role          String    @default("FARMER") // FARMER, FARM_MANAGER, AGRONOMIST, ADMIN, SUPPORT
+  role          String    @default("ADMIN") // ADMIN, MANAGER, OFFICE, ENGINEER
   emailVerified DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  sessions        Session[]
-  accounts        Account[]
-  farmMemberships FarmMembership[]
-  auditLogs       AuditLog[]
-  notifications   Notification[]
-  smsAlerts       SmsAlert[]
-  sprayRecords    SprayRecord[]    @relation("operator")
-  fertRecords     FertiliserRecord[] @relation("fertOperator")
+  sessions      Session[]
+  accounts      Account[]
+  companyUsers  CompanyUser[]
+  auditLogs     AuditLog[]
+  notifications Notification[]
+  jobsAssigned  Job[]      @relation("assignedEngineer")
 }
 
 model Account {
@@ -66,526 +64,363 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// ==================== FARMS ====================
+// ==================== COMPANY ====================
 
-model Farm {
-  id            String   @id @default(cuid())
-  name          String
-  cphNumber     String?  // County Parish Holding e.g. 12/345/6789
-  sbiNumber     String?  // Single Business Identifier
-  county        String?
-  postcode      String?
-  totalHectares Float?
-  farmType      String?  // arable, livestock, mixed, dairy, organic
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+model Company {
+  id                String    @id @default(cuid())
+  name              String
+  tradingName       String?
+  companyNumber     String?
+  vatNumber         String?
+  address           String?
+  postcode          String?
+  phone             String?
+  email             String?
+  website           String?
+  gasSafeNumber     String?   // Gas Safe registered company number
+  niceicNumber      String?   // NICEIC approved contractor number
+  fgasNumber        String?   // F-Gas registered company number
+  cisRegistered     Boolean   @default(false)
+  utrnumber         String?   // UTR for CIS
+  logo              String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
-  memberships      FarmMembership[]
-  fields           Field[]
-  animals          Animal[]
-  animalGroups     AnimalGroup[]
-  sprayRecords     SprayRecord[]
-  equipment        Equipment[]
-  medicineRecords  MedicineRecord[]
-  movements        Movement[]
-  breedingRecords  BreedingRecord[]
-  fertRecords      FertiliserRecord[]
-  nutrientPlans    NutrientPlan[]
-  sfiAgreements    SfiAgreement[]
-  auditChecklists  AuditChecklist[]
-  complianceAlerts ComplianceAlert[]
-  weatherStations  WeatherStation[]
+  users            CompanyUser[]
+  customers        Customer[]
+  jobs             Job[]
+  engineers        Engineer[]
+  vehicles         Vehicle[]
+  certificates     Certificate[]
+  invoices         Invoice[]
+  quotes           Quote[]
+  cisRecords       CisRecord[]
   auditLogs        AuditLog[]
-  vetContacts      VetContact[]
 }
 
-model FarmMembership {
-  id     String @id @default(cuid())
-  userId String
-  farmId String
-  role   String @default("owner") // owner, manager, worker, agronomist
+model CompanyUser {
+  id        String @id @default(cuid())
+  userId    String
+  companyId String
+  role      String @default("OFFICE") // ADMIN, MANAGER, OFFICE
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  farm Farm @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, farmId])
+  @@unique([userId, companyId])
 }
 
-// ==================== FIELDS & LAND ====================
+// ==================== CUSTOMERS ====================
 
-model Field {
-  id          String  @id @default(cuid())
-  farmId      String
-  name        String
-  fieldNumber String?
-  hectares    Float
-  cropType    String?
-  soilType    String?
-  nvzZone     Boolean @default(false)
-  geometry    String? // GeoJSON stored as text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  farm           Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  seasons        FieldSeason[]
-  soilTests      SoilTest[]
-  sprayRecords   SprayRecord[]
-  fertRecords    FertiliserRecord[]
-  nutrientPlans  NutrientPlan[]
-  sfiActions     SfiAction[]
-}
-
-model FieldSeason {
-  id           String    @id @default(cuid())
-  fieldId      String
-  year         Int
-  crop         String
-  variety      String?
-  plantingDate DateTime?
-  harvestDate  DateTime?
-  yieldTonnes  Float?
-
-  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
-}
-
-model SoilTest {
-  id            String   @id @default(cuid())
-  fieldId       String
-  date          DateTime
-  ph            Float?
-  pIndex        Int?
-  kIndex        Int?
-  mgIndex       Int?
-  organicMatter Float?
-
-  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
-}
-
-// ==================== SPRAY RECORDS ====================
-
-model SprayRecord {
-  id                String   @id @default(cuid())
-  farmId            String
-  fieldId           String
-  date              DateTime
-  operatorId        String
-  equipmentId       String?
-  weatherSnapshotId String?  @unique
-  startTime         String?
-  endTime           String?
-  areaTreatedHa     Float?
-  reason            String?
-  notes             String?
-  status            String   @default("draft") // draft, complete
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  farm            Farm          @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  field           Field         @relation(fields: [fieldId], references: [id], onDelete: Cascade)
-  operator        User          @relation("operator", fields: [operatorId], references: [id])
-  equipment       Equipment?    @relation(fields: [equipmentId], references: [id])
-  weatherSnapshot SprayWeather? @relation(fields: [weatherSnapshotId], references: [id])
-  products        SprayProduct[]
-}
-
-model SprayProduct {
-  id               String  @id @default(cuid())
-  sprayRecordId    String
-  productName      String
-  activeIngredient String?
-  doseRate         Float?
-  doseUnit         String? // l/ha, kg/ha, ml/ha
-  areaTreated      Float?
-  batchNumber      String?
-  mapp             String? // MAPP number
-
-  sprayRecord SprayRecord @relation(fields: [sprayRecordId], references: [id], onDelete: Cascade)
-}
-
-model SprayWeather {
-  id              String  @id @default(cuid())
-  tempC           Float?
-  windSpeedKmh    Float?
-  windDirection   String?
-  humidityPct     Float?
-  rainLast24hMm   Float?
-  source          String? // manual, sencrop, metoffice
-
-  sprayRecord SprayRecord?
-}
-
-model PppProduct {
-  id               String  @id @default(cuid())
-  name             String
-  mapp             String? // MAPP registration number
-  activeIngredient String?
-  formulation      String?
-  manufacturer     String?
-  crops            String? // comma-separated
-  maxDoseRate      Float?
-  doseUnit         String?
-  harvestInterval  Int?    // days
-  bufferZone       Int?    // metres
-  aquaticSafe      Boolean @default(false)
-  approvalExpiry   DateTime?
-}
-
-// ==================== EQUIPMENT ====================
-
-model Equipment {
-  id              String    @id @default(cuid())
-  farmId          String
-  name            String
-  type            String    // sprayer, spreader, drill, other
-  nozzleType      String?
-  tankCapacity    Float?
-  calibrationDate DateTime?
-  motExpiry       DateTime?
-  notes           String?
-  createdAt       DateTime  @default(now())
-
-  farm         Farm          @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  sprayRecords SprayRecord[]
-  fertRecords  FertiliserRecord[] @relation("fertEquipment")
-}
-
-// ==================== LIVESTOCK ====================
-
-model AnimalGroup {
-  id        String   @id @default(cuid())
-  farmId    String
-  name      String
-  species   String?  // cattle, sheep, or null for any
-  createdAt DateTime @default(now())
-
-  farm    Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  animals Animal[]
-}
-
-model Animal {
+model Customer {
   id             String    @id @default(cuid())
-  farmId         String
-  earTag         String
-  eidNumber      String?
-  species        String    // cattle, sheep, goat, pig
-  breed          String?
-  sex            String?   // male, female
-  dob            DateTime?
-  damId          String?
-  sireId         String?
-  status         String    @default("alive") // alive, dead, sold, moved
-  groupId        String?
-  passportNumber String?
-  purchaseDate   DateTime?
-  purchaseFrom   String?
-  purchasePrice  Float?
+  companyId      String
+  name           String
+  company        String?
+  email          String?
+  phone          String
+  mobile         String?
+  address        String?
+  postcode       String?
+  accountNumber  String?   // Customer account reference
+  propertyType   String?   // residential, commercial, landlord
+  paymentTerms   String?   // cash, 30_days, 60_days
   notes          String?
-  deathDate      DateTime?
-  soldDate       DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  farm             Farm              @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  group            AnimalGroup?      @relation(fields: [groupId], references: [id])
-  medicineRecords  AnimalMedicine[]
-  movementAnimals  MovementAnimal[]
-  breedingAsDam    BreedingRecord[]  @relation("breedingDam")
-  breedingAsSire   BreedingRecord[]  @relation("breedingSire")
-  breedingAsCalf   BreedingRecord[]  @relation("breedingCalf")
+  companyOwner Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  jobs         Job[]
+  invoices     Invoice[]
+  quotes       Quote[]
+  properties   Property[]
 }
 
-model AnimalMedicine {
-  id               String @id @default(cuid())
-  animalId         String
-  medicineRecordId String
+model Property {
+  id          String   @id @default(cuid())
+  customerId  String
+  address     String
+  postcode    String
+  propertyType String? // house, flat, commercial, landlord_portfolio
+  accessNotes  String?
+  keyLocation  String?
+  createdAt    DateTime @default(now())
 
-  animal         Animal         @relation(fields: [animalId], references: [id], onDelete: Cascade)
-  medicineRecord MedicineRecord @relation(fields: [medicineRecordId], references: [id], onDelete: Cascade)
-
-  @@unique([animalId, medicineRecordId])
+  customer     Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  jobs         Job[]
+  certificates Certificate[]
 }
 
-model MovementAnimal {
-  id         String @id @default(cuid())
-  animalId   String
-  movementId String
+// ==================== ENGINEERS ====================
 
-  animal   Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
-  movement Movement @relation(fields: [movementId], references: [id], onDelete: Cascade)
+model Engineer {
+  id                   String    @id @default(cuid())
+  companyId            String
+  userId               String?   // Link to User account
+  name                 String
+  email                String?
+  phone                String
+  mobile               String?
+  employeeNumber       String?
+  gasSafeNumber        String?   // Individual Gas Safe registration
+  gasSafeExpiry        DateTime?
+  niceicCard           String?   // NICEIC card number
+  niceicExpiry         DateTime?
+  fgasNumber           String?   // F-Gas individual certificate
+  fgasExpiry           DateTime?
+  cscsCard             String?   // Construction Skills Certification Scheme
+  cscsExpiry           DateTime?
+  drivingLicence       String?
+  dvlaExpiry           DateTime?
+  cisTaxStatus         String?   // gross, 20, 30, subcontractor
+  cisVerificationRef   String?
+  niNumber             String?
+  bankAccount          String?
+  sortCode             String?
+  hourlyRate           Float?
+  status               String    @default("active") // active, inactive, holiday, sick
+  vehicleId            String?
+  photo                String?
+  skills               String?   // JSON array of skills: plumbing, heating, electrical, etc.
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 
-  @@unique([animalId, movementId])
+  company      Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  vehicle      Vehicle?      @relation(fields: [vehicleId], references: [id])
+  jobs         JobEngineer[]
+  certificates Certificate[]
+  cisRecords   CisRecord[]
 }
 
-// ==================== MOVEMENTS ====================
+// ==================== VEHICLES / FLEET ====================
 
-model Movement {
+model Vehicle {
+  id             String    @id @default(cuid())
+  companyId      String
+  registration   String    @unique
+  make           String?
+  model          String?
+  year           Int?
+  colour         String?
+  fuelType       String?   // diesel, petrol, electric, hybrid
+  motExpiry      DateTime?
+  taxExpiry      DateTime?
+  insuranceExpiry DateTime?
+  serviceDate    DateTime?
+  serviceDueKm   Int?
+  currentKm      Int?
+  vehicleType    String?   // van, car, truck
+  notes          String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  company   Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  engineers Engineer[]
+}
+
+// ==================== JOBS ====================
+
+model Job {
+  id                String    @id @default(cuid())
+  companyId         String
+  customerId        String
+  propertyId        String?
+  jobNumber         String    @unique
+  title             String
+  description       String?
+  jobType           String    // install, repair, service, inspection, emergency
+  trade             String    // plumbing, heating, electrical, hvac, multi
+  priority          String    @default("normal") // urgent, high, normal, low
+  status            String    @default("scheduled") // quote, scheduled, in_progress, completed, invoiced, cancelled
+  scheduledDate     DateTime?
+  scheduledTime     String?
+  completedDate     DateTime?
+  assignedEngineerId String?
+  estimatedDuration Float?    // hours
+  actualDuration    Float?
+  calloutCharge     Float?
+  labourCost        Float?
+  materialsCost     Float?
+  totalCost         Float?
+  quoteId           String?
+  invoiceId         String?
+  beforePhotos      String?   // JSON array of URLs
+  afterPhotos       String?   // JSON array of URLs
+  customerSignature String?   // Data URL
+  engineerNotes     String?
+  internalNotes     String?
+  requiresCertificate Boolean @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  company          Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customer         Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  property         Property?      @relation(fields: [propertyId], references: [id])
+  assignedEngineer User?          @relation("assignedEngineer", fields: [assignedEngineerId], references: [id])
+  quote            Quote?         @relation(fields: [quoteId], references: [id])
+  invoice          Invoice?       @relation(fields: [invoiceId], references: [id])
+  engineers        JobEngineer[]
+  materials        JobMaterial[]
+  certificates     Certificate[]
+  timeline         JobTimeline[]
+}
+
+model JobEngineer {
+  id         String  @id @default(cuid())
+  jobId      String
+  engineerId String
+
+  job      Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  engineer Engineer @relation(fields: [engineerId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, engineerId])
+}
+
+model JobMaterial {
+  id          String  @id @default(cuid())
+  jobId       String
+  description String
+  partNumber  String?
+  quantity    Float   @default(1)
+  unitPrice   Float
+  totalPrice  Float
+  supplier    String?
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
+
+model JobTimeline {
+  id          String   @id @default(cuid())
+  jobId       String
+  timestamp   DateTime @default(now())
+  event       String   // created, scheduled, started, paused, resumed, completed, invoiced, paid
+  description String?
+  userId      String?
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+}
+
+// ==================== QUOTES ====================
+
+model Quote {
+  id          String    @id @default(cuid())
+  companyId   String
+  customerId  String
+  quoteNumber String    @unique
+  title       String
+  description String?
+  validUntil  DateTime?
+  subtotal    Float
+  vat         Float
+  total       Float
+  status      String    @default("draft") // draft, sent, accepted, rejected, expired
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  company   Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customer  Customer     @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items     QuoteItem[]
+  jobs      Job[]
+}
+
+model QuoteItem {
+  id          String  @id @default(cuid())
+  quoteId     String
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float
+  totalPrice  Float
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+}
+
+// ==================== INVOICES ====================
+
+model Invoice {
+  id            String    @id @default(cuid())
+  companyId     String
+  customerId    String
+  invoiceNumber String    @unique
+  title         String?
+  date          DateTime  @default(now())
+  dueDate       DateTime?
+  subtotal      Float
+  vat           Float
+  total         Float
+  cisDeduction  Float?    // CIS deduction amount if applicable
+  cisRate       Float?    // 20 or 30
+  netPayable    Float?    // Total minus CIS deduction
+  status        String    @default("unpaid") // draft, sent, unpaid, partial, paid, overdue
+  paidAmount    Float?
+  paidDate      DateTime?
+  paymentMethod String?   // bank_transfer, card, cash, cheque
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  company  Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customer Customer       @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  items    InvoiceItem[]
+  jobs     Job[]
+}
+
+model InvoiceItem {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float
+  totalPrice  Float
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+// ==================== CERTIFICATES ====================
+
+model Certificate {
+  id             String    @id @default(cuid())
+  companyId      String
+  jobId          String?
+  engineerId     String?
+  customerId     String?   // Denormalized for quick lookup
+  propertyId     String?
+  certificateType String   // gas_safe_cp12, niceic_eicr, niceic_minor_works, fgas_install, fgas_service, epc
+  certificateNumber String @unique
+  issueDate      DateTime  @default(now())
+  expiryDate     DateTime?
+  nextServiceDue DateTime?
+  status         String    @default("valid") // valid, expired, recalled
+  pdfUrl         String?
+  details        String?   // JSON with certificate-specific data
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  company  Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  job      Job?      @relation(fields: [jobId], references: [id])
+  engineer Engineer? @relation(fields: [engineerId], references: [id])
+  property Property? @relation(fields: [propertyId], references: [id])
+}
+
+// ==================== CIS TAX ====================
+
+model CisRecord {
   id              String   @id @default(cuid())
-  farmId          String
-  fromCph         String
-  toCph           String
-  date            DateTime
-  haulier         String?
-  vehicleReg      String?
-  movementType    String   // on, off, between
-  animalCount     Int      @default(1)
-  species         String?
-  bcmsSubmitted   Boolean  @default(false)
-  bcmsRef         String?
-  departureTime   String?
-  journeyDuration Float?   // hours
-  standstillEnd   DateTime?
+  companyId       String
+  engineerId      String?  // If paying subcontractor
+  monthYear       String   // "2026-03" format
+  grossPayment    Float
+  cisRate         Float    // 0 (gross), 20, or 30
+  cisDeduction    Float
+  netPayment      Float
+  paymentDate     DateTime?
+  hmrcSubmitted   Boolean  @default(false)
+  hmrcSubmittedDate DateTime?
+  hmrcReference   String?
   notes           String?
   createdAt       DateTime @default(now())
 
-  farm    Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  animals MovementAnimal[]
-}
-
-model BreedingRecord {
-  id              String    @id @default(cuid())
-  farmId          String
-  damId           String
-  sireId          String?
-  sireName        String?   // for AI bull manual entry
-  serviceDate     DateTime?
-  method          String?   // natural, ai
-  expectedCalving DateTime?
-  calvingDate     DateTime?
-  calfId          String?
-  calfSex         String?
-  calfBreed       String?
-  calfWeight      Float?
-  assisted        Boolean   @default(false)
-  presentation    String?
-  notes           String?
-  createdAt       DateTime  @default(now())
-
-  farm Farm    @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  dam  Animal  @relation("breedingDam", fields: [damId], references: [id], onDelete: Cascade)
-  sire Animal? @relation("breedingSire", fields: [sireId], references: [id])
-  calf Animal? @relation("breedingCalf", fields: [calfId], references: [id])
-}
-
-// ==================== MEDICINE RECORDS ====================
-
-model MedicineRecord {
-  id                    String   @id @default(cuid())
-  farmId                String
-  date                  DateTime
-  productName           String
-  batchNumber           String?
-  dose                  String?
-  doseNumeric           Float?
-  doseUnit              String?  // ml, mg, tablets
-  route                 String?  // oral, injection, pour-on, intramammary, topical, iv, intranasal
-  withdrawalMeatDays    Int?
-  withdrawalMilkDays    Int?
-  withdrawalEndMeat     DateTime?
-  withdrawalEndMilk     DateTime?
-  withdrawalEndDate     DateTime?
-  vetId                 String?
-  vetName               String?
-  reason                String?
-  notes                 String?
-  animalWeight          Float?
-  expiryDate            String?
-  isCourse              Boolean  @default(false)
-  courseDoses           Int?
-  courseIntervalHours    Int?
-  courseCurrentDose      Int?     @default(1)
-  productId             String?
-  createdAt             DateTime @default(now())
-
-  farm    Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  vet     VetContact?      @relation(fields: [vetId], references: [id])
-  animals AnimalMedicine[]
-}
-
-model VetContact {
-  id         String   @id @default(cuid())
-  farmId     String
-  name       String
-  practice   String?
-  phone      String?
-  email      String?
-  rcvsNumber String?
-  notes      String?
-  createdAt  DateTime @default(now())
-
-  farm             Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  medicineRecords  MedicineRecord[]
-}
-
-model VetMedicine {
-  id                 String  @id @default(cuid())
-  name               String
-  activeIngredient   String?
-  species            String? // cattle, sheep, all
-  defaultDose        String?
-  route              String?
-  withdrawalMeatDays Int?
-  withdrawalMilkDays Int?
-  pomStatus          String? // POM-V, POM-VPS, NFA-VPS, AVM-GSL
-  manufacturer       String?
-}
-
-// ==================== FERTILISER / NUTRIENT ====================
-
-model FertiliserRecord {
-  id                    String   @id @default(cuid())
-  farmId                String
-  fieldId               String
-  date                  DateTime
-  productType           String   // chemical, organic, fym, slurry, sewage_sludge, compost
-  productName           String?
-  rateKgHa              Float?
-  rateUnit              String?  // kg/ha, t/ha, m3/ha
-  nContent              Float?   // N kg/ha applied (available for organic)
-  pContent              Float?   // P2O5 kg/ha
-  kContent              Float?   // K2O kg/ha
-  nPercent              Float?   // N% analysis (chemical)
-  pPercent              Float?   // P2O5% analysis
-  kPercent              Float?   // K2O% analysis
-  method                String?  // broadcast, band, foliar, injected, surface, trailing_shoe
-  operatorId            String?
-  equipmentId           String?
-  areaTreatedHa         Float?
-  soilCondition         String?  // dry, moist, wet, waterlogged, frozen, snow_covered
-  distanceFromWater     Float?   // metres
-  notes                 String?
-  nvzCompliant          Boolean  @default(true)
-  createdAt             DateTime @default(now())
-
-  farm     Farm       @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  field    Field      @relation(fields: [fieldId], references: [id], onDelete: Cascade)
-  operator User?      @relation("fertOperator", fields: [operatorId], references: [id])
-  equipment Equipment? @relation("fertEquipment", fields: [equipmentId], references: [id])
-}
-
-model NutrientPlan {
-  id           String  @id @default(cuid())
-  farmId       String
-  fieldId      String
-  year         Int
-  plannedN     Float?
-  plannedP     Float?
-  plannedK     Float?
-  actualN      Float?
-  actualP      Float?
-  actualK      Float?
-  nvzCompliant Boolean @default(true)
-
-  farm  Farm  @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  field Field @relation(fields: [fieldId], references: [id], onDelete: Cascade)
-}
-
-// ==================== SFI ====================
-
-model SfiAgreement {
-  id                 String   @id @default(cuid())
-  farmId             String
-  sfiRef             String?
-  startDate          DateTime
-  endDate            DateTime
-  totalAnnualPayment Float?
-  status             String   @default("active") // active, expired, pending
-
-  farm    Farm        @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  actions SfiAction[]
-}
-
-model SfiAction {
-  id               String  @id @default(cuid())
-  agreementId      String
-  actionCode       String
-  actionName       String
-  fieldId          String?
-  hectares         Float?
-  paymentPerHa     Float?
-  evidenceRequired String?
-
-  agreement SfiAgreement @relation(fields: [agreementId], references: [id], onDelete: Cascade)
-  field     Field?       @relation(fields: [fieldId], references: [id])
-  evidence  SfiEvidence[]
-}
-
-model SfiEvidence {
-  id          String   @id @default(cuid())
-  actionId    String
-  date        DateTime
-  description String?
-  photoUrl    String?
-  geoLat      Float?
-  geoLng      Float?
-  status      String   @default("draft") // draft, submitted
-
-  action SfiAction @relation(fields: [actionId], references: [id], onDelete: Cascade)
-}
-
-// ==================== RED TRACTOR AUDIT ====================
-
-model AuditChecklist {
-  id        String   @id @default(cuid())
-  farmId    String
-  scheme    String   // red_tractor, organic, other
-  auditDate DateTime?
-  auditor   String?
-  status    String   @default("prep") // prep, in_progress, passed, failed
-
-  farm  Farm        @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  items AuditItem[]
-}
-
-model AuditItem {
-  id            String  @id @default(cuid())
-  checklistId   String
-  requirement   String
-  category      String?
-  status        String  @default("pending") // compliant, non_compliant, na, pending
-  evidenceUrl   String?
-  notes         String?
-
-  checklist AuditChecklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
-}
-
-model ComplianceAlert {
-  id       String    @id @default(cuid())
-  farmId   String
-  type     String    // deadline, expiry, missing_record
-  message  String
-  dueDate  DateTime?
-  resolved Boolean   @default(false)
-  createdAt DateTime @default(now())
-
-  farm Farm @relation(fields: [farmId], references: [id], onDelete: Cascade)
-}
-
-// ==================== WEATHER ====================
-
-model WeatherStation {
-  id         String @id @default(cuid())
-  farmId     String
-  provider   String // sencrop, metoffice, manual
-  stationRef String?
-  lat        Float?
-  lng        Float?
-
-  farm     Farm             @relation(fields: [farmId], references: [id], onDelete: Cascade)
-  readings WeatherReading[]
-}
-
-model WeatherReading {
-  id            String   @id @default(cuid())
-  stationId     String
-  timestamp     DateTime
-  tempC         Float?
-  humidity      Float?
-  windSpeed     Float?
-  windDirection String?
-  rainfallMm    Float?
-  pressureHpa   Float?
-
-  station WeatherStation @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  company  Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  engineer Engineer? @relation(fields: [engineerId], references: [id])
 }
 
 // ==================== NOTIFICATIONS ====================
@@ -603,23 +438,12 @@ model Notification {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model SmsAlert {
-  id      String    @id @default(cuid())
-  userId  String
-  phone   String
-  message String
-  sentAt  DateTime?
-  status  String    @default("pending") // pending, sent, failed
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 // ==================== AUDIT LOG ====================
 
 model AuditLog {
   id        String   @id @default(cuid())
   userId    String?
-  farmId    String?
+  companyId String?
   action    String
   entity    String?
   entityId  String?
@@ -627,8 +451,8 @@ model AuditLog {
   ipAddress String?
   createdAt DateTime @default(now())
 
-  user User? @relation(fields: [userId], references: [id])
-  farm Farm? @relation(fields: [farmId], references: [id])
+  user    User?    @relation(fields: [userId], references: [id])
+  company Company? @relation(fields: [companyId], references: [id])
 }
 
 // ==================== CONTACT FORM ====================
@@ -638,7 +462,7 @@ model ContactSubmission {
   name      String
   email     String
   phone     String?
-  farmName  String?
+  company   String?
   message   String
   source    String?  // utm_source
   medium    String?  // utm_medium
