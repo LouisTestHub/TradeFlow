@@ -1,9 +1,15 @@
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { HeroSection } from '@/components/marketing/HeroSection';
+import { TrustStatsBar } from '@/components/marketing/TrustStatsBar';
+import { ReviewBadges } from '@/components/marketing/ReviewBadges';
 import { ProblemSection } from '@/components/marketing/ProblemSection';
+import { UnlimitedSection } from '@/components/marketing/UnlimitedSection';
+import { VideoDemoSection } from '@/components/marketing/VideoDemoSection';
 import { FeaturesSection } from '@/components/marketing/FeaturesSection';
+import { NewFeaturesSection } from '@/components/marketing/NewFeaturesSection';
 import { HowItWorksSection } from '@/components/marketing/HowItWorksSection';
+import { SocialProofSection } from '@/components/marketing/SocialProofSection';
 import { PricingSection } from '@/components/marketing/PricingSection';
 import { TestimonialsSection } from '@/components/marketing/TestimonialsSection';
 import { FetfSection } from '@/components/marketing/FetfSection';
@@ -24,9 +30,15 @@ export default function HomePage() {
       <Header />
       <main>
         <HeroSection />
+        <TrustStatsBar />
+        <ReviewBadges />
         <ProblemSection />
+        <UnlimitedSection />
+        <VideoDemoSection />
         <FeaturesSection />
+        <NewFeaturesSection />
         <HowItWorksSection />
+        <SocialProofSection />
         <PricingSection />
         <TestimonialsSection />
         <FetfSection />

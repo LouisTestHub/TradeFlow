@@ -17,13 +17,11 @@ const caseStudies = [
     trade: 'Plumbing & Heating',
     engineer: 'Dave Thompson',
     headline: 'Saved 15 hours/week and added £28K revenue in 6 months',
-    result: '15 hours/week saved on admin',
-    revenue: '£28,000 extra revenue in 6 months',
     image: 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=800&h=600&fit=crop&q=80',
     stats: [
       { label: 'Time saved', value: '15 hrs/week' },
       { label: 'Revenue increase', value: '£28k in 6mo' },
-      { label: 'Engineers hired', value: '1 → 3' },
+      { label: 'Engineers hired', value: '1 → 6' },
     ],
   },
   {
@@ -32,14 +30,26 @@ const caseStudies = [
     location: 'Hackney, London',
     trade: 'Electrical Services',
     engineer: 'Marcus Osei',
-    headline: 'Scaled from 3 to 12 NICEIC engineers in 18 months',
-    result: 'Scaled from 3 to 12 engineers',
-    revenue: '£180,000 annual revenue increase',
+    headline: 'Scaled from 3 to 12 NICEIC engineers — +£180k/year revenue',
     image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=800&h=600&fit=crop&q=80',
     stats: [
-      { label: 'Engineers hired', value: '3 → 12' },
+      { label: 'Engineers', value: '3 → 12' },
       { label: 'Revenue increase', value: '+£180k/year' },
       { label: 'First-time fix', value: '68% → 89%' },
+    ],
+  },
+  {
+    slug: 'coolflow-hvac-birmingham',
+    company: 'CoolFlow HVAC',
+    location: 'Solihull, Birmingham',
+    trade: 'HVAC & Refrigeration',
+    engineer: 'James Kavanagh',
+    headline: 'F-Gas audit passed first time, 25% more jobs/week, retention up 40%',
+    image: 'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&h=600&fit=crop&q=80',
+    stats: [
+      { label: 'F-Gas audit', value: 'Passed' },
+      { label: 'More jobs/week', value: '+25%' },
+      { label: 'Retention up', value: '+40%' },
     ],
   },
 ];
@@ -60,7 +70,7 @@ export default function CaseStudiesPage() {
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-3 gap-8">
               {caseStudies.map((study) => (
                 <Link
                   key={study.slug}
@@ -76,15 +86,15 @@ export default function CaseStudiesPage() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4 text-white">
                       <p className="text-sm font-medium opacity-90">{study.trade} • {study.location}</p>
-                      <h2 className="text-2xl font-bold font-[var(--font-dm-sans)] mt-1">{study.company}</h2>
+                      <h2 className="text-xl font-bold font-[var(--font-dm-sans)] mt-1">{study.company}</h2>
                     </div>
                   </div>
                   <div className="p-6">
-                    <p className="text-lg font-semibold text-[#0F172A] mb-4">&quot;{study.headline}&quot;</p>
-                    <div className="grid grid-cols-3 gap-4">
+                    <p className="text-base font-semibold text-[#0F172A] mb-4">&quot;{study.headline}&quot;</p>
+                    <div className="grid grid-cols-3 gap-3">
                       {study.stats.map((stat, i) => (
                         <div key={i}>
-                          <p className="text-2xl font-bold text-[#1565C0]">{stat.value}</p>
+                          <p className="text-xl font-bold text-[#1565C0]">{stat.value}</p>
                           <p className="text-xs text-slate-500 mt-1">{stat.label}</p>
                         </div>
                       ))}
