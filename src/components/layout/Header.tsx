@@ -10,8 +10,9 @@ const navLinks = [
   { href: '/compliance', label: 'Compliance' },
   { href: '/case-studies', label: 'Case Studies' },
   { href: '/comparison', label: 'Compare' },
+  { href: '/opportunity', label: 'Opportunity' },
+  { href: '/market', label: 'Market Research' },
   { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
 ];
 
 export function Header() {

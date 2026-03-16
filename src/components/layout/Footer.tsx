@@ -17,9 +17,9 @@ const footerLinks = {
   ],
   Company: [
     { href: '/about', label: 'About' },
+    { href: '/opportunity', label: 'Opportunity' },
+    { href: '/market', label: 'Market Research' },
     { href: '/contact', label: 'Contact' },
-    { href: '/privacy', label: 'Privacy' },
-    { href: '/terms', label: 'Terms' },
   ],
 };
 
