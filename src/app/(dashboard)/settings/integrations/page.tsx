@@ -1,205 +1,129 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 
-export default function IntegrationsPage() {
-  const [xeroConnected, setXeroConnected] = useState(false);
-  const [xeroOrg, setXeroOrg] = useState('');
-  const [syncFrequency, setSyncFrequency] = useState('weekly');
-  const [autoSync, setAutoSync] = useState(false);
-  const [showConfig, setShowConfig] = useState(false);
+const integrations = [
+  {
+    id: 'xero',
+    name: 'Xero',
+    description: 'Sync invoices, contacts, and payments with Xero accounting',
+    icon: '💼',
+    iconBg: 'bg-[#13B5EA]/10',
+    status: 'active' as const,
+    href: '/settings/integrations/xero',
+  },
+  {
+    id: 'quickbooks',
+    name: 'QuickBooks',
+    description: 'Connect QuickBooks Online for accounting sync',
+    icon: '📗',
+    iconBg: 'bg-green-50',
+    status: 'coming_soon' as const,
+    href: '#',
+  },
+  {
+    id: 'sage',
+    name: 'Sage',
+    description: 'Integrate with Sage 50 or Sage Business Cloud',
+    icon: '📘',
+    iconBg: 'bg-emerald-50',
+    status: 'coming_soon' as const,
+    href: '#',
+  },
+  {
+    id: 'freeagent',
+    name: 'FreeAgent',
+    description: 'Sync with FreeAgent for small business accounting',
+    icon: '📙',
+    iconBg: 'bg-orange-50',
+    status: 'coming_soon' as const,
+    href: '#',
+  },
+  {
+    id: 'stripe',
+    name: 'Stripe',
+    description: 'Accept card payments and manage payment links',
+    icon: '💳',
+    iconBg: 'bg-purple-50',
+    status: 'active' as const,
+    href: '/settings/payments/settings',
+  },
+  {
+    id: 'google_calendar',
+    name: 'Google Calendar',
+    description: 'Two-way calendar sync for job scheduling',
+    icon: '📅',
+    iconBg: 'bg-blue-50',
+    status: 'coming_soon' as const,
+    href: '#',
+  },
+];
 
-  // Category mapping state
-  const [categories, setCategories] = useState({
-    materials: 'Materials & Parts',
-    medicine: 'Veterinary & Medicine',
-    fertiliser: 'Fertiliser & Nutrients',
-    vetFees: 'Veterinary & Medicine',
-  });
+const statusLabels: Record<string, { label: string; className: string }> = {
+  active: { label: 'Available', className: 'bg-green-50 text-green-600 border-green-200' },
+  connected: { label: '🟢 Connected', className: 'bg-green-50 text-green-700 border-green-200' },
+  coming_soon: { label: 'Coming Soon', className: 'bg-gray-50 text-gray-500 border-gray-200' },
+};
 
-  const handleConnect = () => {
-    // Placeholder: would redirect to Xero OAuth2
-    setXeroConnected(true);
-    setXeroOrg('TradeFlow Services Ltd');
-  };
-
-  const handleDisconnect = () => {
-    setXeroConnected(false);
-    setXeroOrg('');
-  };
-
+export default function IntegrationsHubPage() {
   return (
-    <div>
-      <div className="flex items-center gap-3 mb-6">
+    <div className="space-y-6">
+      <div className="flex items-center gap-3">
         <Link href="/settings" className="text-slate-400 hover:text-slate-600 min-h-[48px] min-w-[48px] flex items-center justify-center">
           ←
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Integrations</h1>
-          <p className="text-slate-500 mt-1">Connect external services to TradeFlow</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 font-[var(--font-dm-sans)]">Integrations</h1>
+          <p className="text-slate-500 mt-1">Connect TradeFlow with your favourite tools</p>
         </div>
       </div>
 
-      {/* Xero Integration */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-[#13B5EA]/10 rounded-xl flex items-center justify-center text-2xl shrink-0">
-            💼
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-1">
-              <h2 className="text-lg font-semibold text-slate-800">Xero Accounting</h2>
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                xeroConnected ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'
-              }`}>
-                {xeroConnected ? '🟢 Connected' : '⬜ Not connected'}
-              </span>
-            </div>
-
-            {xeroConnected ? (
-              <div className="space-y-2">
-                <p className="text-sm text-slate-600">Organisation: <span className="font-medium">{xeroOrg}</span></p>
-                <p className="text-sm text-slate-500">Last Sync: {new Date().toLocaleDateString('en-GB')} — {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</p>
-                <div className="flex flex-wrap gap-2 pt-2">
-                  <button onClick={handleDisconnect} className="text-sm text-red-600 border border-red-200 px-4 py-2 rounded-xl hover:bg-red-50 min-h-[48px]">
-                    Disconnect
-                  </button>
-                  <button className="text-sm text-primary border border-primary/30 px-4 py-2 rounded-xl hover:bg-primary/5 min-h-[48px]">
-                    Sync Now
-                  </button>
-                  <button onClick={() => setShowConfig(!showConfig)} className="text-sm text-slate-600 border border-gray-200 px-4 py-2 rounded-xl hover:bg-gray-50 min-h-[48px]">
-                    Configure
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <p className="text-sm text-slate-500 mb-3">
-                  Connect your Xero account to automatically sync spray, medicine, and fertiliser costs as expenses.
-                </p>
-                <button onClick={handleConnect} className="bg-[#13B5EA] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#0FA0D1] min-h-[48px]">
-                  Connect Xero Account
-                </button>
-              </div>
-            )}
-          </div>
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <p className="text-xs text-slate-500">Available</p>
+          <p className="text-2xl font-bold text-slate-800 mt-1">{integrations.filter(i => i.status === 'active').length}</p>
         </div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <p className="text-xs text-slate-500">Connected</p>
+          <p className="text-2xl font-bold text-green-600 mt-1">0</p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
+          <p className="text-xs text-slate-500">Coming Soon</p>
+          <p className="text-2xl font-bold text-slate-400 mt-1">{integrations.filter(i => i.status === 'coming_soon').length}</p>
+        </div>
+      </div>
 
-        {/* Xero Configuration */}
-        {showConfig && xeroConnected && (
-          <div className="mt-6 pt-6 border-t border-gray-100 space-y-6">
-            {/* Sync Settings */}
-            <div>
-              <h3 className="font-medium text-slate-800 mb-3">Sync Settings</h3>
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs font-medium text-slate-500 mb-1">Sync Frequency</label>
-                  <select
-                    value={syncFrequency}
-                    onChange={e => setSyncFrequency(e.target.value)}
-                    className="rounded-xl border border-gray-300 px-3 py-2.5 text-sm min-h-[48px] w-full max-w-xs"
-                  >
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="manual">Manual Only</option>
-                  </select>
+      {/* Integration Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {integrations.map((integration) => {
+          const status = statusLabels[integration.status];
+          const isClickable = integration.status === 'active';
+          
+          const card = (
+            <div className={`bg-white rounded-2xl border border-gray-100 shadow-sm p-6 transition-all ${isClickable ? 'hover:shadow-md hover:border-gray-200 cursor-pointer' : 'opacity-75'}`}>
+              <div className="flex items-start gap-4">
+                <div className={`w-12 h-12 ${integration.iconBg} rounded-xl flex items-center justify-center text-2xl shrink-0`}>
+                  {integration.icon}
                 </div>
-                <label className="flex items-center gap-3 min-h-[48px] cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={autoSync}
-                    onChange={e => setAutoSync(e.target.checked)}
-                    className="w-5 h-5 rounded border-gray-300"
-                  />
-                  <span className="text-sm text-slate-700">Auto-sync new records (TradeFlow → Xero)</span>
-                </label>
-              </div>
-            </div>
-
-            {/* Category Mapping */}
-            <div>
-              <h3 className="font-medium text-slate-800 mb-3">Category Mapping</h3>
-              <p className="text-sm text-slate-500 mb-3">Map TradeFlow categories to your Xero chart of accounts.</p>
-              <div className="space-y-3">
-                {Object.entries(categories).map(([key, value]) => (
-                  <div key={key} className="flex items-center gap-3">
-                    <span className="text-sm text-slate-600 w-40 shrink-0 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                    <span className="text-slate-400">→</span>
-                    <input
-                      type="text"
-                      value={value}
-                      onChange={e => setCategories({ ...categories, [key]: e.target.value })}
-                      className="rounded-xl border border-gray-300 px-3 py-2 text-sm min-h-[44px] flex-1"
-                    />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-lg font-semibold text-slate-800">{integration.name}</h3>
+                    <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full border ${status.className}`}>
+                      {status.label}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* What Syncs */}
-            <div>
-              <h3 className="font-medium text-slate-800 mb-3">What Gets Synced</h3>
-              <div className="space-y-2 text-sm text-slate-600">
-                <div className="flex items-start gap-2">
-                  <span className="text-primary">•</span>
-                  <p><span className="font-medium">Materials costs</span> → Xero expense ({categories.materials})</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-primary">•</span>
-                  <p><span className="font-medium">Medicine costs</span> → Xero expense ({categories.medicine})</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-primary">•</span>
-                  <p><span className="font-medium">Fertiliser costs</span> → Xero expense ({categories.fertiliser})</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-primary">•</span>
-                  <p><span className="font-medium">Vet fees</span> → Xero expense ({categories.vetFees})</p>
+                  <p className="text-sm text-slate-500">{integration.description}</p>
                 </div>
               </div>
             </div>
+          );
 
-            <button className="bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-primary/90 min-h-[48px]">
-              Save Configuration
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Gas Safe Integration (placeholder) */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-4">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-2xl shrink-0">
-            🌦️
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-1">
-              <h2 className="text-lg font-semibold text-slate-800">Gas Safe Register</h2>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">⬜ Not connected</span>
-            </div>
-            <p className="text-sm text-slate-500 mb-3">Connect your Gas Safe weather station for automatic weather data in spray records.</p>
-            <button className="text-sm text-slate-600 border border-gray-200 px-4 py-2 rounded-xl hover:bg-gray-50 min-h-[48px]">
-              Connect Gas Safe Account
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* BCMS Integration (placeholder) */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-6">
-        <div className="flex items-start gap-4">
-          <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-2xl shrink-0">
-            ⚡
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-3 mb-1">
-              <h2 className="text-lg font-semibold text-slate-800">NICEIC Certification</h2>
-              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">Coming Soon</span>
-            </div>
-            <p className="text-sm text-slate-500">Direct BCMS submission for engineer certifications. Coming in a future update.</p>
-          </div>
-        </div>
+          if (isClickable) {
+            return <Link key={integration.id} href={integration.href}>{card}</Link>;
+          }
+          return <div key={integration.id}>{card}</div>;
+        })}
       </div>
     </div>
   );

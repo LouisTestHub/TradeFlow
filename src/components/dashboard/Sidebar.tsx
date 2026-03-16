@@ -4,77 +4,23 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import OfflineIndicator from './OfflineIndicator';
 
-interface NavItem {
-  href: string;
-  label: string;
-  icon: string;
-}
-
-interface NavGroup {
-  label: string;
-  items: NavItem[];
-}
-
-const navGroups: NavGroup[] = [
-  {
-    label: 'Dashboard',
-    items: [
-      { href: '/dashboard', label: 'Overview', icon: '🏠' },
-      { href: '/revenue', label: 'Revenue', icon: '💷' },
-    ],
-  },
-  {
-    label: 'Scheduling',
-    items: [
-      { href: '/scheduling', label: 'Calendar', icon: '📅' },
-      { href: '/map', label: 'Live Map', icon: '🗺️' },
-      { href: '/jobs', label: 'Job List', icon: '📋' },
-    ],
-  },
-  {
-    label: 'Customers',
-    items: [
-      { href: '/customers', label: 'Directory', icon: '👥' },
-    ],
-  },
-  {
-    label: 'Engineers',
-    items: [
-      { href: '/engineers', label: 'Team', icon: '👷' },
-      { href: '/mobile', label: 'Mobile View', icon: '📱' },
-    ],
-  },
-  {
-    label: 'Finance',
-    items: [
-      { href: '/invoices', label: 'Invoices', icon: '💰' },
-      { href: '/quotes', label: 'Quotes', icon: '📝' },
-      { href: '/quotes/builder', label: 'Quote Builder', icon: '🔨' },
-      { href: '/cis', label: 'CIS Tax', icon: '💷' },
-    ],
-  },
-  {
-    label: 'Operations',
-    items: [
-      { href: '/stock', label: 'Parts & Stock', icon: '📦' },
-      { href: '/fleet', label: 'Vehicles', icon: '🚐' },
-      { href: '/certificates', label: 'Certificates', icon: '📜' },
-    ],
-  },
-  {
-    label: 'Reports',
-    items: [
-      { href: '/reports', label: 'Reports', icon: '📊' },
-    ],
-  },
-  {
-    label: 'Settings',
-    items: [
-      { href: '/settings', label: 'Company', icon: '🏢' },
-      { href: '/settings/notifications', label: 'Notifications', icon: '🔔' },
-      { href: '/branches', label: 'Branches', icon: '🏪' },
-    ],
-  },
+const navItems = [
+  { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
+  { href: '/jobs', label: 'Jobs', icon: '📋' },
+  { href: '/engineers', label: 'Engineers', icon: '👷' },
+  { href: '/customers', label: 'Customers', icon: '👥' },
+  { href: '/quotes', label: 'Quotes', icon: '📝' },
+  { href: '/invoices', label: 'Invoices', icon: '💰' },
+  { href: '/certificates', label: 'Certificates', icon: '📜' },
+  { href: '/fleet', label: 'Fleet', icon: '🚐' },
+  { href: '/cis', label: 'CIS Tax', icon: '💷' },
+  { href: '/calendar', label: 'Calendar', icon: '📅' },
+  { href: '/reports', label: 'Reports', icon: '📊' },
+  { href: '/settings', label: 'Settings', icon: '⚙️' },
+  { href: '/settings/integrations', label: 'Integrations', icon: '🔌' },
+  { href: '/settings/suppliers', label: 'Suppliers', icon: '🏗️' },
+  { href: '/settings/reminders', label: 'Reminders', icon: '🔔' },
+  { href: '/settings/payments', label: 'Payments', icon: '💳' },
 ];
 
 interface SidebarProps {
@@ -98,43 +44,34 @@ export default function Sidebar({ companyName, userName, syncStatus }: SidebarPr
     <aside className="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-white border-r border-gray-200 z-30">
       {/* Logo */}
       <div className="flex items-center gap-2 px-6 py-5 border-b border-gray-100">
-        <span className="text-2xl">🔧</span>
+        <span className="text-2xl">🌿</span>
         <span className="font-[var(--font-dm-sans)] font-bold text-lg text-primary">TradeFlow</span>
       </div>
 
-      {/* Company name */}
+      {/* Farm name */}
       <div className="px-6 py-3 border-b border-gray-100">
         <p className="text-sm font-semibold text-slate-800">{companyName}</p>
       </div>
 
-      {/* Navigation with Groups */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
-        {navGroups.map((group) => (
-          <div key={group.label}>
-            <h3 className="px-3 mb-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              {group.label}
-            </h3>
-            <div className="space-y-1">
-              {group.items.map((item) => {
-                const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors min-h-[44px] ${
-                      isActive
-                        ? 'bg-primary/10 text-primary'
-                        : 'text-slate-600 hover:bg-gray-50 hover:text-slate-900'
-                    }`}
-                  >
-                    <span className="text-lg">{item.icon}</span>
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href));
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors min-h-[44px] ${
+                isActive
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-slate-600 hover:bg-gray-50 hover:text-slate-900'
+              }`}
+            >
+              <span className="text-lg">{item.icon}</span>
+              {item.label}
+            </Link>
+          );
+        })}
       </nav>
 
       {/* Sync status */}
