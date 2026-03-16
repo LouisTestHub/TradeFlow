@@ -22,6 +22,12 @@ export function HeroSection() {
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link
                 href="/login"
+                className="inline-flex items-center justify-center px-8 py-4 bg-[#F97316] text-white text-lg font-semibold rounded-xl hover:bg-[#EA580C] transition-all shadow-lg hover:shadow-xl min-h-[48px] animate-pulse"
+              >
+                🚀 Try Demo — No Signup →
+              </Link>
+              <Link
+                href="/login"
                 className="inline-flex items-center justify-center px-8 py-4 bg-[#1E3A5F] text-white text-lg font-semibold rounded-xl hover:bg-[#162D4A] transition-all shadow-lg hover:shadow-xl min-h-[48px]"
               >
                 Start Free Trial
